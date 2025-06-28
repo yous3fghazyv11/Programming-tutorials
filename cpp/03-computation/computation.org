@@ -1,0 +1,1213 @@
+#+TITLE: Computation
+#+AUTHOR: Yousef Ghazy
+#+DESCRIPTION: Computation
+#+OPTIONS: toc:nil
+
+الcomputation هنا معناها الstructure بتاع العمليات اللي بتحصل علي البيانات، في المحاضره دي هنوضح ازاي تحسب value من مجموعه operands واللي بيتقال عليه (expression)، ازاي تختار انهي statements تتنفذ امتي (selection)، ازاي تنفذ نفس الcomputation علي عده قيم او values، وازاي نعمل برامج صغيره جوا البرنامج بتاعنا (functions)
+* الفهرس :toc:
+- [[#الcomputation][الcomputation]]
+- [[#الهدف-والtools-اللي-بنستخدمها][الهدف والtools اللي بنستخدمها]]
+- [[#الexpressions][الexpressions]]
+- [[#الconstant-expressions][الconstant expressions]]
+- [[#الoperators][الoperators]]
+- [[#الstatements][الStatements]]
+  - [[#الselection][الselection]]
+  - [[#الiteration][الiteration]]
+- [[#الfunctions][الfunctions]]
+  - [[#ايه-فايده-الfunctions][ايه فايده الfunctions؟]]
+  - [[#الfunction-declaration][الfunction declaration]]
+- [[#الvectors][الvectors]]
+  - [[#المرور-علي-عناصر-الvector][المرور علي عناصر الvector]]
+  - [[#الاضافه-علي-vector][الاضافه علي vector]]
+- [[#drill][Drill]]
+- [[#review][review]]
+- [[#exercises][Exercises]]
+
+* الcomputation
+احنا نوعا ما نقدر نقول ان كل اللي البرنامج بيعمله هو computation؛ يعني بياخد شوية inputs وبيطلع شوية output. في الآخر، إحنا بنسمي الجهاز اللي بيشغّل البرنامج ده computer.
+
+النظرة دي منطقية لو فهمنا "input" و"output" بشكل واسع شوية.
+
+الـinput ممكن ييجي من keyboard، أو mouse، أو touch screen، أو من files، أو من برامج تانية، أو حتى من أجزاء تانية من نفس البرنامج.
+وفيه كمان مصادر input تانيه زي: music keyboards، video recorders، network connections، temperature sensors، image sensors، وpower supplies.
+
+علشان يتعامل البرنامج مع الـinput، غالبًا بيبقى فيه بيانات جواه، أحيانًا بنسميها data structures أو state بتاع البرنامج.
+مثلاً، برنامج تقويم (calendar) ممكن يبقى جواه قايمة بالأعياد في بلاد مختلفة، وقايمة بمواعيدك.
+
+بعض البيانات دي بتكون جزء من البرنامج من الأول، والبعض التاني بيتكون مع الوقت لما البرنامج يقرأ input ويجمع منه معلومات.
+يعني، برنامج الـcalendar هيكوّن قايمة المواعيد بتاعتك من الـinput اللي إنت بتدخّله.
+
+في الحالة دي، الـinput الأساسي هو طلبك إنك تشوف أيام أو شهور معينة (غالبا بكليك بالماوس)،
+وكمان لما تدخل مواعيد جديدة (غالبًا عن طريق الكتابة بالكيبورد).
+الـoutput هو عرض التقويم والمواعيد، وكمان الأزرار والتعليمات اللي بتظهرلك على الشاشة.
+وممكن كمان البرنامج يبعتلك تذكيرات، أو يزامن بياناتك مع نسخ تانية من نفس البرنامج.
+
+زي ما الـinput بييجي من مصادر كتير، كمان الـoutput بيروح لأماكن مختلفة.
+ممكن يروح للشاشة، أو لملفات، أو من خلال network، أو لأجهزة تانية، أو لبرماج تانيه، أو لأجزاء تانية من نفس البرنامج.
+
+من وجهة نظر البرمجة، أكتر أنواع الـinput/output أهمية وإثارة للاهتمام هي اخر اتنين، من برنامج لبرنامج ومن جذء من البرنامج لجذء اخر من نفس البرنامج.
+
+ومعظم الكورس ده ممكن نعتبره شرح للنوع الأخير:
+إزاي نكتب برنامج على شكل مجموعة أجزاء بتشتغل مع بعض، وبتشارك وتتبادل البيانات؟
+دي من أهم الأسئلة في البرمجة.
+
+الاختصار I/O معناه "input/output".
+وفي السياق ده، الـoutput من جزء معين من الكود هو الـinput للجزء اللي بعده.
+والأجزاء دي بتشارك بيانات مخزنة في الmemory، أو على مساحات تخزين زي الهاردات، أو بتتنقل بال network connections.
+
+ولما نقول "أجزاء من البرنامج"، بنقصد حاجات زي:
+
+1) مثلا function بتاخد شوية arguments وتطلع نتيجة (زي حساب الجذر التربيعي لرقم).
+2) أو function بتعمل فعل معين على حاجة مادية (زي رسم خط على الشاشة).
+3) أو function بتعدّل جدول معين في البرنامج (زي إضافة اسم جديد لقايمة عملاء).
+
+ولما نقول "input" و"output"، غالبًا بنقصد المعلومات اللي داخلة أو خارجة من computer،
+بس زي ما شُفت، ممكن كمان نقصد المعلومات اللي جزء من البرنامج بيستقبلها أو بينتجها.
+
+الـinputs للجزء ده بنسميها غالبًا arguments، والـoutputs بنسميها results.
+
+والمقصود بـcomputation ببساطة هو إنتاج output معين بناءً على input معين،
+زي إنتاج الرقم 49 من الرقم 7 باستخدام function اسمها square.
+
+وبالمناسبة، معلومة ممكن تهمك: لحد الخمسينات، كلمة "computer" كانت بتوصف شخص بيعمل computations يدويًا،
+زي المحاسب أو الملاح أو الفيزيائي.
+دلوقتي إحنا بنخلّي الـcomputers (بأشكالها المختلفة زي الموبايلات) تعمل الحسابات دي بدلنا.
+
+* الهدف والtools اللي بنستخدمها
+شغلانتنا كمبرمجين هي إننا نعبّر عن الـcomputations:
+- بشكل صحيح (Correctly)
+- بشكل بسيط (Simply)
+- بشكل فعال (Efficiently)
+
+خلي بالك من ترتيب القيم دي:
+مافيش فايدة من برنامج سريع لو بيطلع نتايج غلط.
+وبرضو، البرنامج السريع اللي بيطلع نتايج صحيحه ممكن يبقى معقد لدرجة إنه لازم يتكتب من أول وجديد علشان نعمل إصدار جديد منه.
+لأن افتكر دايمًا إن البرامج المفيدة بيتم تعديلها بشكل مستمر علشان تواكب احتياجات جديدة أو أجهزة جديدة.
+عشان كده، لازم أي برنامج – وأي جزء من البرنامج – يكون بسيط قدر الإمكان في أداء وظيفته.
+
+مثلًا، افترض إنك كتبت برنامج ممتاز لتعليم الحساب للأطفال في مدرسة، لكن الهيكل الداخلي بتاعه فوضوي.
+كنت بتتكلم مع الأطفال بأي لغة؟ إنجليزي؟ إنجليزي وإسباني؟
+طب لو أنا عايز أستخدمه في فنلندا؟ أو في الكويت؟
+هتغير اللغة الطبيعية اللي البرنامج بيخاطب بيها الطفل إزاي؟
+لو الهيكل الداخلي للبرنامج فوضوي، العملية اللي منطقها بسيط (لكن في الواقع بتكون صعبة جدًا) زي تغيير لغة البرنامج، هتبقى مستحيلة.
+
+الاهتمام بالبساطة والفعالية بيبدأ أول ما نقرر نكتب كود للناس، ونتحمل مسؤولية إننا نكتبه بشكل كويس. لازم نتحمل المسؤولية دي لما نقرر نبقى محترفين.
+بشكل عملي، ده معناه إننا ماينفعش نرمي كود عشوائي لحد ما "يشتغل"، لازم نهتم بالهيكل أو الstructure بتاع الكود.
+
+وعلى عكس المتوقع، الاهتمام بالـstructure وجودة الكود هو غالبًا أسرع طريق علشان نخلي البرنامج يشتغل.
+لما البرمجة تتعمل بشكل صح، الاهتمام ده بيقلل من أكتر جزء بضان في البرمجة: debugging.
+يعني، هيكل الكود الجيد وقت الكتابة ممكن يقلل عدد الأخطاء، والوقت اللي هنقضيه بندوّر على الأخطاء ونصلحها.
+
+أهم أداة عندنا لتنظيم البرنامج – وتنظيم تفكيرنا وقت البرمجة – هي إننا نقسم المشكله الكبيره لمشاكل صغيره.
+الطريقة دي ليها شكلين رئيسيين:
+
++ الAbstraction:
+  بنخبي التفاصيل اللي مش محتاجين نعرفها علشان نستخدم حاجة (يعني "implementation details") ورا interface يكون بسيط وعام.
+  مثال: بدل ما ندخل في تفاصيل عمليه الsorting دليل تليفونات (ودي تفاصيل ممكن تكتب عنها كتب)،
+  إحنا ببساطة بنستدعي sort algorithm من الC standard library.
+  كل اللي محتاجين نعرفه هو إزاي ننادي الfunction اللي اسمها =(b)std::sort= ، والـb هو دليل التليفونات.
+  مثال تاني: إحنا مش بنتعامل مباشرة مع الmemory – لأنها فوضوية – بل بنستخدم typed variables، أو vectors، أو maps.
++ تكنيك Divide-and-conquer:
+  بنقسم المشكلة الكبيرة لمجموعة مشاكل أصغر. مثال: لو عايز تبني قاموس، ممكن تقسم المهمة لثلاثة:
+  - اقرأ البيانات
+  - رتّب البيانات
+  - اطبع البيانات
+  كل مهمة من دول أبسط بكتير من المشكلة الأصلية.
+
+ليه الطريقة دي فعالة؟
+رغم إن البرنامج اللي متقسم ممكن يكون أطول شوية من برنامج كله محشور ومتلصم مع بعضه بأعجوبه.
+بس الحقيقة إننا كبشر مش بنعرف نتعامل كويس مع المشاكل الكبيرة.
+في البرمجة – وفي الحياة – بنحل المشاكل الكبيرة عن طريق تقسيمها لأجزاء أصغر وأسهل.
+يعني مثلًا، برنامج فيه 1000 سطر ممكن يكون فيه أكتر من 10 أضعاف عدد الأخطاء اللي في برنامج من 100 سطر.
+علشان كده بنحاول نخلي البرنامج الطويل مكون من أجزاء صغيرة، كل جزء أقل من 100 سطر. وكل جذء بيتعامل مع مشكله معينه وبيحلها وملوش علاقه بالمشاكل التانيه.
+
+في البرامج الكبيرة اللي بتوصل مئات الألاف او حتي ملايين السطور من الكود.
+استخدام abstraction وdivide-and-conquer مش مجرد اختيار، دي ضرورة.
+إحنا ببساطة مش قادرين نكتب ونحافظ على برامج ضخمة ومترابطة في كود واحد.
+ممكن تبص لبقية الكورس ده على إنه سلسلة طويلة من أمثلة لمشاكل محتاجة تتقسم،
+ومعها الأدوات والأساليب اللي تساعدك تعمل كده.
+
+لاحظ التركيز على structure وorganization:
+إنت مش هتطلع كود كويس لمجرد إنك كتبت سطور كتير.
+كتير جدا من المبتدئين والهاكرز بيفتخروا بعدد السطور اللي كتبوها، فاكرين ان كل لما البرنامج كبر دا بيديله هيبه اكتر.
+بس متتفاجئش لما تعرض البرنامج بتاعك اللي بيتكون من الف سطر علي مبرمج محترف وتلاقيه رجعهولك بعد حذف 900 سطر واضافه 200 علشان يكون الناتج 300 سطر بس.
+وفي عالم البرمجه، لو في برنامجين بيعملوا نفس الشيئ بس واحد منهم بيتكون من عدد سطور اقل، غالبا البرنامج الأصغر بيكون افضل.
+
+ليه بنتكلم عن ده دلوقتي؟
+علشان في المرحلة دي، انت لسه معندكش اي فكره يعني ايه كود حقيقي.
+وفيها علي الأقل شهور قبل ما تكتب كود ممكن الناس تعتمد عليه في شغلهم أو حياتهم.
+إحنا بنقول الكلام ده علشان نوجّه تركيزك من الأول في الأتجاه الصح والmindset الصح في تصميم البرامج.
+
+من المغري إنك تجري بسرعة وتركز على الحاجات العملية اللي هتستخدمها فورًا،
+وتتجاهل الأجزاء الsoft أو النظريه من فن تطوير البرمجيات.
+لكن المبرمجين والمصممين المحترفين (وأغلبهم اتعلم ده بالطريقة الصعبة، وهي نفس الطريقه اللي هنحاول نعلمك بيها)
+عارفين إن الاهتمام بالstructure هو اهم شيئ في الsoftware الجيد،
+وإن تجاهله بيؤدي لكوارث مكلفة.
+
+من غير structure، فـإنت – بشكل مجازي – بتبني بطوب طين.
+ينفع؟ آه، لكن عمرك ما هتوصل للدور العاشر (الطوب الطين ما يقدرش يشيل).
+
+لو عندك طموح تبني حاجة كبيرة أو دائمة،
+لازم تهتم بهيكل الكود وتنظيمه من الأول،
+بدل ما تضطر تتعلمه بعد ما تقع.
+
+* الexpressions
+الexpressions هي ابسط building block في البرمجه، الexpression ببساطه بيحسب value من مجموعه من الoperands.
+
+ابسط expression عندنا هو ببساطه literal value زي مثلا 10 أو 'a' أو 3.14 او "Nora". صحيح انه مش بيحسب value من مجموعه قيم بس هو في حد ذاته value.
+
+اسامي الvariables ايضا تعتبر expressions، الvariable هو اسم بيشير لobject معين، يعني مجرد اسم لobject.
+
+علي سبيل المثال بص الكود دا:
+
+#+begin_src C
+int length = 20; // 20 is a literal integer (used to initialize a variable)
+int width = 40;
+int area = length∗width; // a multiplication
+#+end_src
+
+هنا الexpression مش الinitializatiojn، الinitialization بيتقال عليه statement، هنا الliterals بتوعنا 20 و 40 هم الexpressions. بنستخدمهم علشان نعمل initialization للvariables اللي اسمهم length و width، وبعدها بنضربهم.
+
+بمعني اننا بنضرب القيم الموجوده في length بالقيمه اللي موجوده في width، هنا مثلا length ما هي الا اختصار ل: "القيمه اللي موجوده في الobject اللي اسمه length".
+
+وأيضا مثلا:
+
+#+begin_src C
+length = 99; // assign 99 to length
+#+end_src
+
+هنا الexpression اللي علي شمال الassignment operator اللي هو length معناه: "الobject اللي اسمه length"، وده بيخلي عمليه الassignment دي تتقرأ: "حط 99 في الobject اللي اسمه length".
+
+فلاحظ الفرق بين معني length لما تستخدمها علي يمين الassignment operator وعلي شماله (as an lvalue and rvalue).
+
+الassignment تعتبر expression، ليه؟ علشان بتحسب قيمه من two operands + operator، الoperands هم الvariable والvalue اللي بنحطها فيه. والexpression دا بينتج قيمه الobject الجديده. مثلا:
+
+#+begin_src C
+int a = 3;
+int b = 5 + (a = 7);
+std::cout << b << ", " << a << '\n';
+// will print 12, 7
+#+end_src
+
+نقدر نعمل expressions اكثر تعقيدا شويه باستخدام بعض الbinary operators اللي اتعودنا عليها زي + أو * وممكن لو احتاجنا نعملهم grouping باستخدام الاقواس:
+
+#+begin_src C
+int perimeter = (length + width) ∗ 2; // add then multiply
+#+end_src
+
+بدون الأقواس هنضطر نقول:
+
+#+begin_src C
+int perimeter = length * 2 + width * 2;
+#+end_src
+
+بمعني اننا هضرب كل واحد فيهم في اتنين الأول بعدها نعمل الجمع، دي basic arithmetic، بس لاحظ اننا كان ممكن نعمل الغلطه دي:
+
+#+begin_src C
+int perimeter = length + width * 2; // add width * 2 to length
+#+end_src
+
+اخر ايرور دا بيتقال عليه logical error، بمعني ان الcompiler هيcompile عادي والlinker هي link عادي بس البرنامج مش هيعمل المطلوب منه، وده بسبب غلطه منطقيه انت عملتها في الكود، وغالبا الerrors دي بتكون اصعب errors انك تكتشفها وتصلحها. علشان كدا القاعده في حوار الexpressions دا تحديدا انك لو قلقان، حط اقواس. بس في نفس الوقت حاول تتعلم بقدر الامكان عن الoperator presence بحيث انك تقلل الأقواس عندك في الكود لأن كتير الأقواس بيقلل الreadability بتاعه الكود بتاعك.
+
+* الconstant expressions
+البرامج معظم الوقت بتستخدم ثوابت كتير، وهنا كلمه ثوابت معناها قيم ثابته مش بتتغير علي مدار البرنامج علي عكس المتغيرات، علي سبيل المثال، برنامج هندسي هتلاقيه بيستخدم pi او ثابت بيحول من mile لkilometer واللي غالبا هيبقي حاجه زي 1.609، طبعا احنا هنبقي عايزين اسامي للكلام دا، زي ما قلنا pi مقلناش 3.14159، كذلك مش هقعد كل شويه في الكود اكتب الأرقام دي، وبرضو زي ما انت شايف pi عمرها ما هتتغير، فاحنا عايزين طريقه نقدر بيها نعرف اسم جديد مثلا للبرنامج يبقي pi ويبقي فيه القيمه 3.14159 ومتتغيرش ابدا علي مدار البرنامج، علشان كدا ال++C فيها مفهوم الsymbolic constant وده باختصار named object متقدرش تغير قيمته بعد الinitialization، زي كدا مثلا:
+
+#+begin_src C
+constexpr double PI = 3.14159;
+PI = 7; // error : assignment to constant
+double c = 2 * PI * r; // OK: we just read pi; we don’t try to change it
+#+end_src
+
+هنا بيتقال علي PI دي symbolic constant، وزي ما انت شايف بنعرفاه بالkeyword بتاعتنا =constexpr= ولاحظ برضو ان PI هنا uppercase بمعني ان كل حروفها capital، دا مش ضروري علشان تعمل symbolic constant. بس دا style الC developers تبنوه علشان لما تشوف اسم في الكود كل حروفه كابيتال تعرف ان دا symbolic constant.
+
+الsymbolic constants دي مهمه جدا علشان تخلي الكود بتاعك readable، انت ممكن تكون خدت بالك ان 3.14159 دي تقريب ل pi، بس هل كنت هتعرف حاجه زي مثلا 299792458؟ وبرضو لو حد قالك اننا عايزين نغير الكود علشان يستخدم pi ب12 رقم بدل 6 بس، هل هتعدل الرقم في كل مكان عندك في الكود؟ اكيد هيبقي اسهل بكتير انك بس تعمل كدا:
+
+#+begin_src C
+constexpr double pi = 3.14159265359;
+#+end_src
+
+علشان كدا احنا بنحاول علي قد ما نقدر اننا نقلل استخدام الliterals في الكود بتاعنا علي قد ما نقد (الا طبعا لو بنعرف بيهم constants)، الliterals برا الdefinition of constants بيتقال عليهم *magic numbers*
+
+وبالمناسبه 299792458 دا ثابت كوني، سرعه الضوء في الفراغ متقاسه بالمتر علي الثانيه، لو انت مقدرتش تعرف دا لحظيا، ليه متوقع انك ممكن متتلخبطش من literals كتير مدموجه في الكود بتاعك؟ تجنب الmagic constants!
+
+ال =constexpr= لازم يتعرفله قيمه محدده وقت الcompile time، بمعني انك لو عندك =constexpr= في الكود بتاعك وجيت تcompile والcompiler مقدرش انه يحدد قيمته ايه وقت الcompilation هيطلعلك error:
+
+#+begin_src C
+constexpr int MAX = 100;
+int n;
+std::cin >> n; // value of n is only aquired at runtime
+constexpr int C1 = MAX + 7; // OK: c1 is 107
+constexpr int C2 = n + 7; // error : we don’t know the value of n until runtime
+#+end_src
+
+انما لو عندك حاله انت عايز تعمل فيها constant بيتعمله initialization بvalue مش هتبقي معروفه في الcompile time، ال++C بتقدملك مفهوم للconstants اسمه =const=:
+
+#+begin_src C
+int n;
+std::cin >> n;
+const int c3 = 3 + n; // this is ok
+c3 = 7; // error: c3 is a constant an cannot be reassigned
+#+end_src
+
+والنوع دا من الconstants مشهور جدا ومستخدم بكثره
+
+* الoperators
+إحنا لحد الان بنستخدم أبسط الـ operators. بس قريب هتحتاج تستخدم أكتر علشان تقدر تعبّر عن عمليات أعقد. أغلب الـ operators مشهورة ومعروفة، فهنشرحهم بعدين وقت ما تحتاجهم، وكمان تقدر تدور على التفاصيل بنفسك وقت ما تحتاجهم. دا جدول من الكتاب بكتير من الoperators الشائعه:
+
+[[../../images/operators3.png]]
+[[../../images/operators4.png]]
+
+لاحظ ان:
+
+#+begin_src C
+a > b > c;
+// is the same as
+(a > b) > c;
+#+end_src
+
+وده هيبقي يا اما =true > c= يا اما =false > c= ، بمعني ان =a > b > c= مش معناها انك بتتcheck لو b اقل من a واكبر من c، لو كنا عايزين نقول كدا كنا هنقول حاجه زي كدا مثلا: =a > b && b > c= ودي اللي معناها فعلا اننا بنتcheck لو b اقل من a واكبر من c.
+
+الزياده نقدر نعبر عنها ب 4 طرق:
+
+#+begin_src C
+int a = 3;  // a == 3
+++a;        // a == 4
+a++;        // a == 4
+a += 1;     // a == 6
+a = a + 1;  // a == 7
+#+end_src
+
+لاحظ ان تاني واحده مش بتزود قيمه a بشكل لحظي، هي بس بتقول ان قيمه a هتزيد، والزياده دي مش بتحصل غير لما تيجي تستخدم a بعد كدا، انما قيمه a في الexpression نفسه بتفضل زي ما هي، مثلا:
+
+#+begin_src C
+int a = 3;
+int b = 5 + a++; // b == 8 because a == 3
+std::cout << b << ", " << a << '\n'; // 8, 4
+#+end_src
+
+نستخدم أي طريقه؟ وليه؟ إحنا بنفضّل أول واحده، اللي هي =a++= لأنها بتعبّر بشكل مباشر أكتر عن فكرة الزيادة (incrementing). هي بتقول إحنا عايزين نزود a بدل ما تقول احنا عايزين نجمع 1 على a وبعدين نكتب النتيجة في a. بشكل عام، الطريقة اللي بتعبّر عن فكرة بشكل مباشر أكتر في الكود بتكون أفضل من غيرها. حتي لو كان الoutput واحد بس الحاجه الreadability بتتحسن بكتير لما نختار expressions بتوضح الفكره اكتر.
+
+وبنفس الطريقة، إحنا بنفضّل a *= scale على a = a * scale.
+
+* الStatements
+لما بنكتب برنامج، الexpressions بتطلع قيمة باستخدام شوية حاجات زي الـ operators.
+طيب نعمل إيه بقى لو عايزين نرجّع كذا قيمة؟ أو نكرّر حاجة كذا مرة؟ أو نختار بين اختيارات علي حسب شروط معينه؟ أو ناخد input من الuser أو نطبع له حاجة؟
+
+في ++C، زي لغات برمجة كتير، بنستخدم حاجة اسمها statements علشان نعمل الحاجات دي.
+
+لحد دلوقتي، شفنا نوعين من الـ statements:
+- expression بينتهي بـ =;= (ده اسمه expression statement)
+- وتعريف variable أو function (ده اسمه declaration)
+
+يعني الـ expression statement هو ببساطة expression (زي =3+5= أو =x=7=) متبوع semicolon =;=.
+
+خد بالك إن ~=~ (الassignment operator) يعتبر operator (duh)، وعلشان كده a = b تعتبر expression.
+لكن علشان تخلي الexpression ده جملة (statement)، لازم تحط =;= في الآخر.
+طيب ليه لازم نحط الفاصلة المنقوطة؟ السبب تقني بشكل كبير.
+
+شوف المثال ده:
+
+#+begin_src C
+a = b
+++c;
+#+end_src
+
+هنا هيحصل syntax error، لأن الcompiler مش فاهم تقصد إيه:
+
+هل تقصد:
+
+#+begin_src C
+a = b; ++c;
+#+end_src
+
+ولا تقصد:
+
+#+begin_src C
+a = b++; c;
+#+end_src
+
+الفرق مهم جدًا، والcompiler محتاج يعرف فين نهاية الexpression علشان يفهم الكود صح.
+ودي مش مشكلة مقتصرة على لغات البرمجة بس!
+شوف الجملة دي:
+"man eating tiger!"
+
+ممكن تتفسر بطريقتين:
+- الراجل بيأكل نمر
+- ولا نمر بياكل راجل؟
+
+علشان كده إحنا بنحتاج علامات الترقيم (punctuation) علشان نوضح المعنى، زي:
+"man-eating tiger!"
+(يعني نمر بياكل بشر)
+
+لما الstatements تكون ورا بعض، الكمبيوتر بينفذهم بالترتيب المكتوب.
+مثلاً:
+
+#+begin_src C
+int a = 7;
+std::cout << a << '\n';
+#+end_src
+
+أول حاجة بيحصل definition ل a بالvalue اللي هي 7، بعد كده بيطبع a.
+
+الجمل المفيدة (statements with effects):
+عادةً، الstatement لازم يكون ليها تأثير (تعمل حاجة).
+الstatement اللي ما بتعملش حاجة غالباً بتكون logical errors.
+مثلاً:
+
+#+begin_src C
+1 + 2;  // do an addition but don't use the sum
+a * b;  // do a mutliplication but don't use the product
+#+end_src
+
+الstatements دي ملهاش تأثير عندك في الكود، وغالبا الcompiler هيديك warning عليهم.
+
+علشان كده، الexpression statements اللي بنستخدمها عادة بتكون:
+
+- اسناد او assignment (زي x = 5)
+- إدخال/إخراج (زي cin و cout)
+- نداء دوال (function calls)
+
+فيه كمان نوع من الstatements اسمه empty statements. شوف المثال:
+
+#+begin_src C
+if (x == 5);
+    y = 3;
+#+end_src
+
+المفروض السطر الأول ما يكونش فيه =;=.
+لكن في ++C الكود ده ينفع، علي الرغم من ان شكله يدي علي انه error وهو غالبا logical error فعلا.
+
+اللي بيحصل هو إن البرنامج:
+هيختبر إذا x == 5، ولو صحيح، ينفّذ empty statement (يعني ما يعملش حاجة!)
+
+بعد كده، في كل الأحوال، ينفّذ =;y = 3=
+
+يعني سواء x كانت 5 أو لأ، y هتاخد القيمة 3، وده غالبًا مش اللي كنت عايزه.
+
+الجزء الجاي هيكلمنا عن statements بتغيّر ترتيب التنفيذ، علشان نقدر نكتب عمليات حسابية أكتر تعقيدًا من إننا نمشي سطر ورا التاني بس.
+
+** الselection
+ساعات كتير في البرامج بتاعتنا هنبقي عايزين نعمل حاجه فقط في حاله ان شرط ما متحقق، لو الشرط دا مش متحقق هنبقي عايزين نعمل حاجه تانيه، او اننا مثلا نختار من وسط اختيارات كتير، في ال++C دا بيتعمل عن طريق يا اما if-statement يا اما switch-statement.
+*** الif-statements
+ابسط شكل من اشكال الselection هي الif-statement، واللي بتعمل حاجه بنائا علي شرط معين، مثلا:
+
+#+begin_src C
+int a = 0;
+int b = 0;
+std::cout << "Please enter two integers\n";
+std::cin >> a >> b;
+if (a < b) // condition
+    std::cout << a << " is smaller than " << b << '\n'; // 1st alternative (if condition is true)
+else
+    std::cout << a << " is bigger than or equal to " << b << '\n'; // 2nd alternative (if condition is false)
+#+end_src
+
+الـ if-statement يعني (بيتقال عليها برضو جمله شرطيه) اللي بتخلينا نختار ما بين اختيارين. لو الشرط اللي حاطينه طلع صح، الكود اللي بعده بيتنفذ. ولو الشرط طلع غلط، الكود التاني هو اللي بيتنفذ.
+الفكرة بسيطة جدًا. في الحقيقة، أغلب الحاجات الأساسية في لغات البرمجة هي في الأصل طرق كتابة جديدة لحاجات إحنا اتعلمناها وإحنا صغيرين – يمكن حتى وإحنا في الحضانة.
+
+يعني مثلًا، أكيد اتقالك وإنت صغير إنك علشان تعدي الشارع عند إشارة المرور، لازم تستنى الإشارة لما تبقى خضرا:
+"لو الإشارة خضرا، امشي"
+و
+"لو الإشارة حمرا، استنى"
+
+بالـ C نكتبها كده مثلًا:
+
+#+begin_src C
+if (traffic_light == green)
+    go();
+#+end_src
+
+أو:
+
+#+begin_src C
+if (traffic_light == red)
+    wait();
+#+end_src
+
+الفكرة الأساسية سهلة، بس برضه سهل إنك تستخدم الـ if بشكل سطحي أو بسيط زيادة عن اللزوم.
+خد بالك من المثال الجاي وشوف إيه المشكلة فيه:
+
+#+begin_src C
+// convert from inches to centimeters or centimeters to inches
+// a suffix ’i’ or ’c’ indicates the unit of the input
+
+constexpr double cm_per_inch = 2.54; // number of centimeters in an inch
+double length = 1; // length in inches or centimeters
+char unit = ' ';
+std::cout << "Please enter a length followed by a unit (c or i):\n";
+std::cin >> length >> unit;
+if (unit == 'i')
+    std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
+else
+    std::cout << length << "cm == " << length/cm_per_inch << "in\n";
+#+end_src
+
+في الحقيقة، البرنامج هيشتغل زي ما انت متوقع تقريبا: لو كتبت 1i هتلاقيه بيقولك:
+
+#+begin_src text
+1in == 2.54cm
+#+end_src
+
+ولو كتبت 2.54c هيقولك:
+
+#+begin_src text
+2.54cm == 1in
+#+end_src
+
+بس المشكلة إننا ما اختبرناش البرنامج لما المستخدم يدخل بيانات غلط.
+البرنامج بيفترض إن المستخدم راجل محترم ودايما هيكتب input صح، بس الحقيقه ان المستخدم ساعات كتير بيطلع راجل مش تمام.
+الشرط 'unit == 'i بيميز بين الحالة اللي فيها الunit بتساوي 'i' وأي حالة تانية،
+بس ما بيدورش على حرف 'c' خالص.
+
+طب إيه اللي هيحصل لو المستخدم كتب 15f (يقصد feet مثلًا) "عشان يشوف إيه اللي هيحصل"؟
+الشرط ('unit == 'i) هيطلع غلط، والبرنامج هيشغّل جزء الـ else، ويحوّل من سنتيمتر لإنش.
+وأكيد ده مش اللي كنا عايزينه يحصل لما كتبنا 'f'.
+
+علشان كده، لازم دايمًا نختبر برامجنا باستخدام "مدخلات غلط"،
+لأن حد في يوم من الأيام – سواء بقصد أو بالصدفة – هيكتب حاجة غلط.
+والبرنامج المفروض يتصرف بشكل منطقي حتى لو اليوزر ماعملش كده.
+
+دي نسخه محسنه من البرنامج:
+
+#+begin_src C
+if (unit == 'i')
+    std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
+else if (unit == 'c')
+    std::cout << length << "cm == " << length/cm_per_inch << "in\n";
+else
+    std::cout << "Sorry, I don't know a unit called '" << unit << "'\n";
+#+end_src
+
+هنا هو بيتcheck لو كان 'unit == 'i لو الشرط صح بينفذ الكود اللي في الif-statement، لو الشرط طلع غلط هينفذ الكود اللي في الelse-statement واللي هي بدورها فيها if-else تانيه
+
+الif-else اللي جوا الelse-statement بتتcheck لو كان 'unit == 'c ولو الشرط دا اتحقق بتنفذ الكود اللي فيها ولو متحققش بتنفذ الelse بتاعه الif التانيه وبتقول ال"sorry" بتاعتنا.
+
+والsyntax بتاعها بيبقي شكله كدا:
+
+#+begin_src text
+if (expresion)
+    (statement)
+else if (expression)
+    (statement)
+else
+    (statement)
+#+end_src
+
+طب افرض احنا عايزين ننفذ اكتر من statement جوا ال if-statement؟ بنحط curly braces!
+
+#+begin_src text
+if (expression) {
+    (statement)
+    (statement)
+} else if (expression) {
+    (statement)
+    (statement)
+} else {
+    (statement)
+    (statement)
+}
+#+end_src
+
+*** الswitch-statement
+الحقيقه المثال اللي فوق دا لما كنا بنقارن unit ب 'i' و 'c' واحد من اشهر انواع الselection في البرمجه، وهو selection قائم علي مقارنه value بمجموعه من الconstants.
+
+النوع دا من الselection مشهور اوي لردجه ان ++C عندها ليه statement خاصه اسمها الswitch-statement:
+
+#+begin_src C
+switch (unit) {
+    case 'i':
+        std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
+        break;
+    case 'c':
+        std::cout << length << "cm == " << length/cm_per_inch << "in\n";
+        break;
+    default:
+        std::cout << "Sorry, I don't know a unit called '" << unit << "'\n";
+        break;
+}
+#+end_src
+
+الswitch-statement أوضح وأسهل في الفهم من استخدام if-else متشعبة او زي ما بنقول nested،
+خصوصًا لما بنقارن قيمة معينة بعدد كبير من القيم الثابتة (constants).
+
+اللي بيحصل هو إن القيمة اللي بنكتبها بين القوسين بعد switch
+بيتقارن بينها وبين مجموعة من القيم التانية،
+وكل قيمة بنحددها باستخدام case.
+
+لو القيمة طابقت واحدة من القيم اللي في case،
+البرنامج بينفذ الكود اللي تابع لـ case دي.
+وبعدها لازم نكتب break علشان نمنع تنفيذ باقي الحالات.
+
+ولو القيمة ما طابقتش أي واحدة من الحالات،
+البرنامج بينفذ الكود اللي مكتوب بعد default (لو موجود).
+
+مش لازم تكتب default،
+بس من الأفضل دايمًا تحطه،
+إلا لو كنت متأكد بنسبة 100٪ إنك غطيت كل الاحتمالات – والبرمجة هتعلمك إن "اليقين المطلق" ده حاجة نادرة جدًا.
+
+دي بعض المفاهيم التقنيه الخاصه بالswitch-statement
+1. القيمه اللي بنعمل switch عليها لازم تبقي integer أو char أو enumeration type (هنعرف بعد كدا دي معناها ايه)، تحديدا مينفعش تعمل switch علي string او floating-point value
+2. الvalue اللي جوا الcase labels لازم تبقي constant expression، يعني مينفعش تستخدم variables جوا case label الا في حاله انه كان constant expression او literal
+3. مينفعش تستخدم نفس الvalue لاتنين case labels
+4. تقدر تستخدم اكتر من case label لنفس الcase
+5. متنساش تنهي كل case label بbreak
+
+
+مثلا:
+
+#+begin_src C
+// you can switch only on integers, etc.:
+std::cout << "Do you like fish?\n";
+std::string s;
+std::cin >> s;
+switch (s) {  // error : the value must be of integer, char, or enum type
+    case "no":
+        // ...
+        break;
+    case "yes":
+        // ...
+        break;
+}
+#+end_src
+
+علشان نعمل selection علي string لازم نستخدم يا اما if-statement او map ودي حاجه هنشرحها بعدين في فصول متقدمه من الكورس.
+
+واحده من المميزات الأساسيه في الswitch-statement إنها بتخلي الكود أسرع من مجموعة if و else if، خصوصًا لما عدد الحالات يبقى كبير.
+
+ليه بقى أسرع؟
+لأن الـ switch بيقدر يجهز في وقت الcompile time جدول فيه الحالات المختلفة، وبيتنقل ليها مباشرة بدل ما يقارن واحدة واحدة زي if.
+
+بس علشان ده يحصل، في شوية شروط:
+
+لازم كل case يكون له قيمة ثابتة (constant)، يعني معروف قيمته وقت الcompile time. زي رقم ثابت (5)، أو حرف ('a') أو constexpr أو enum.
+
+القيم في case لازم تكون مختلفة عن بعض، مينفعش تكرر نفس القيمة في أكتر من case. مثلا:
+
+#+begin_src C
+// case labels must be distinct and constants:
+int y = 'y';
+constexpr char n = 'n';
+std::cout << "Do you like fish?\n";
+char a = 0;
+std::cin >> a;
+switch (a) {
+    case n: // ok because n is constexpr
+    // ...
+    break;
+case y: // error : variable in case label
+    // ...
+    break;
+case 'n': // error : duplicate case label (n’s value is ’n’)
+    // ...
+    break;
+default:
+    // ...
+    break;
+}
+#+end_src
+
+ساعات بنبقي عايزين نعمل نفس الشيئ لمجموعه من القيم في الswitch، في الحاله دي نقدر نعمل كدا:
+
+#+begin_src C
+// you can label a statement with several case labels:
+std::cout << "Please enter a digit\n";
+char a = 0;
+std::cin >> a;
+switch (a) {
+    case '0': case '2': case '4': case '6': case '8':
+        std::cout << "is even\n";
+        break;
+    case '1': case '3': case '5': case '7': case '9':
+        std::cout << "is odd\n";
+        break;
+    default:
+        std::cout << "that's not a digit\n";
+        break;
+}
+#+end_src
+
+أكتر خطأ شائع في الswitch-statement هو انك تنسي تنهي الcase بbreak-statemnt، مثلا:
+
+#+begin_src C
+switch (unit) {
+    case 'i':
+        std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
+    case 'c':
+        std::cout << length << "cm == " << length/cm_per_inch << "in\n";
+}
+#+end_src
+
+الكود دا مفيهوش error، دا كود ++C عادي وزي الفل، ولكن لما هتيجي تشلغه اللي هيحصل انه في حاله مثلا ان unit طلعت ب'i' وعمل الي جوا الcase الأولي، هينزل علي الcase اللي بعدها وينفذ الكود اللي فيها عادي، فمثلا لو دخلت للبرنامج دا input زي مثلا 2i، هيحصل كدا:
+
+#+begin_src text
+2in == 5.08cm
+2cm == 0.787402in
+#+end_src
+
+هتلاقيه نفذ الكود بتاع لو كان الinput بالcm برضو، علشان كدا دايما خلي بالك وانت بتستخدم switch انك تحط break بعد كل case
+
+في الحالات النادره اللي بنبقي عايزين فيها اننا حتي لو لقينا match في case معينه وعايزين نكمل، وعايزين الcompiler واللي بيقرأ الكود يعرف اننا قاصدين نكمل وان دا مش bug، ممكن نستخدم حاجه اسمها fallthrough:
+
+#+begin_src C
+switch (check) {
+    case checked:
+        if (val<0)
+        val = 0;
+        [[fallthrough]];
+    case unchecked:
+        // ... use val ...
+        break;
+}
+#+end_src
+
+الfallthrough دا attribute بيخلي نيتنا واضحه احنا عايزين نعمل ايه فعلا
+
+** الiteration
+ساعات كتير في البرمجه هتلاقي نفسك عايز تعمل حاجه كذا مره، زي مثلا انك عايز تقرأ كذا input زي ما شفنا قبل كدا وده هيخليك عايز تعمل عمليه input علي نفس الobject كذا مره، في حاله العمليات اللي محتاجه تكرار زي دي ال++C بتقدم بعض الstatements اللي هتساعدنا في ده
+*** الwhile-statement
+كمثال على التكرار أو الiteration، فكر في أول برنامج تم تشغيله على جهاز كمبيوتر بيخزن البرامج جواه (وهو جهاز EDSAC).
+البرنامج دا اتكتب من "David J. Wheeler" في احمد مختبرات جامعه كامبريدج في إنجلترا، يوم 6 مايو 1949.
+وكان الهدف من البرنامج هو حساب وطباعة قائمة بسيطة من المربعات (تربيع الأرقام) بالشكل دا:
+
+#+begin_src text
+0    0
+1    1
+2    4
+3    9
+4    16
+  ...
+98    9604
+99    9801
+#+end_src
+
+زي ما انت شايف البرنامج بيطبع رقم وبعد كدا حرف تاب 't\' وبعد كدا مربع الرقم دا، البرنامج دا بال++C هيبقي شكله كدا:
+
+#+begin_src C
+int main() {
+    // calculate and print a table of squares 0-99
+    int i = 0; // star t from 0
+    while (i < 100) { // as logn as i is less than 100
+        std::cout << i << '\t' << square(i) << '\n';
+        ++i; // increment i (that is, i becomes i+1)
+		// then it will start again, this time with i being 2 instead of 1
+    }
+}
+#+end_src
+
+
+اول حاجه هتلاحظ اننا علشان نجيب المربع بنستخدم function اسمها square، وبندخلها i واللي هو الأساس بتاعنا والfunction بترجعلنا قيمه i تربيع.
+
+الfunction لو تلاحظ مش من الstandard library، دي function احنا اللي عاملينها، هتتعلم ازاي تعملها في القسم بتاع الfunction في نفس المحاضره دي، بس حاليا علشان تخلي المثال دا يشتغل، ممكن تبدل ~square(i)~ ب ~i * i~ وهيديك نفس القيمه.
+
+طبعا البرنامج ده ماكانش مكتوب فعليًا بـ++C، لكن الـlogic كان زي اللي موضح هنا:
+- بنبدأ بـ0.
+- بنشوف إذا كنا وصلنا لـ100، ولو حصل كده يبقى خلصنا.
+- غير كده، بنـprint الرقم وتربيعه، مفصولين بـtab ('\t')، نزود الرقم، ونعيد المحاولة.
+
+الواضح إن علشان نعمل كده إحنا محتاجين:
+- طريقة نكرر بيها شوية statements (يعني loop)
+- متغير نتابع بيه إحنا عدّينا كام مرة في الـloop (loop variable أو control variable)، هنا الـint اللي اسمه i
+- الinitializer لـloop variable، وهنا هو 0
+- الtermination criterion، واللي هو إننا عايزين نعدي في الـloop 100 مرة
+- حاجة نعملها كل مرة في الـloop (body بتاع الـloop))
+
+
+الـlanguage construct اللي استخدمناه هنا اسمه while-statement. بعد الـkeyword المميزة ليه while، بيجي شرط وبعده الـbody:
+
+#+begin_src C
+while (i < 100) {
+    std::cout << i << '\t' << square(i) << '\n';
+    ++i; 
+}
+#+end_src
+
+الـloop body عبارة عن block (محددة بـcurly braces) بتطبع صف من الجدول وتزوّد المتغير i.
+
+كل مرة بندخل فيها الـloop، بنبدأ باختبار =i<100=.
+
+لو الشرط اتحقق، يبقى لسه مخلصناش، وننفّذ الـloop body.
+
+لو وصلنا للنهاية، يعني ~i == 100~ ، بنخرج من الـwhile-statement  وننفّذ اللي بعده.
+
+في البرنامج ده، مافيش حاجة بعده، فبنخرج من البرنامج.
+
+الـloop variable بتاع while-statement لازم يكون متعرّف وinitialized برا (قبل) الـloop.
+
+لو ماعرّفناهوش، الـcompiler هيطلع error.
+
+لو عرّفناه وماعملناش له initialization، معظم الـcompilers هيطلع warning زي "local variable i not set"، بس هيخلينا نكمل لو أصرّينا.
+
+ما تصرّش! الـcompilers تقريبًا دايمًا عندها حق لما تطلع تحذير عن متغير مش مهيّأ. المتغيرات اللي من غير initialization سبب شائع للأخطاء.
+
+في الحالة دي، كتبنا:
+
+#+begin_src C
+int i = 0; // start from 0
+#+end_src
+
+فأشطا الدنيا تمام.
+
+-----------
+*جرب دا:*
+الحرف 'b' مثلا ما هو الا ~char('a'+1)~ والحرف 'c' ما هو الا ~char('a'+2)~
+
+جرب تعمل برنامج بيطبع الحروف من a ل z مع الnumeric representation بتاع كل واحد فيهم:
+
+#+begin_src text
+a    97
+b    98
+c    99
+....
+#+end_src
+
+-----------
+
+لاحظ الطريقه اللي عملنا بيها grouping للtwo statements اللي الwhile بتعملهم execute:
+
+#+begin_src C
+while (i < 100) {
+    std::cout << i << '\t' << square(i, 2) << '\n';
+    ++i; 
+}
+#+end_src
+
+سلسله من الstatements معمولهم grouping باستخدام ~{}~ بيقال عليهم block statement، ساعات ممك
+
+*** الfor-statement
+الـiteration على sequence من الأرقام شائع جدًا، علشان كده ++C، زي أغلب لغات البرمجة التانية، فيها syntax مخصوص له.
+الـfor-statement شبه الـwhile-statement، لكن التحكم في الـcontrol variable بيكون كله جوا الأقواس بتاعه الstatement في نفس السطر، فبيبقى سهل تشوفه وتفهمه.
+كنا ممكن نكتب "البرنامج الأول" بالشكل ده:
+
+#+begin_src C
+int main() {
+	for (int i = 0; i < 100; i++) {
+		std::cout << i << '\t' << square(i, 2) << '\n';
+}
+#+end_src
+
+باختصار المنظر دا بيقول نفذ التعليمات اللي في الbody بتاع الfor statement ب i = 0 ومع كل مره زود قيمه i بواحد لحد لما i توصل ل 99.
+
+دايما الfor-statement بيبقي في while-statement بتعادلها، في الحاله دي مثلا، لو هنعمل اخر مثال دا بwhile-statement  بدل for هيبقي شكله كدا:
+
+#+begin_src C
+int i = 0;  // the for-statement initialize
+while (i < 100) {  // the for-statement condition
+    std::cout << i << '\t' << square(i, 2) << '\n';
+	++i;  // the for-statement increment
+}
+#+end_src
+
+طب نستخدم انهي؟ هيبقي صعب علينا دلوقتي نشرح الحالات اللي الwhile فيها بتبقي افضل من الfor، انت هتاخد بالك من دا مع نفسك مع الأمثله، ولكن القاعده العامه ان معظم الوقت الfor-statement بتبقي احسن من الwhile-statement.
+
+اوعي تعدل الcontrol variable جوا الbody بتاع الfor-statement، دا هيبقي inconvenient جدا لأي حد بيقرأ الكود، علي سبيل المثال:
+
+#+begin_src C
+// bad code below
+for (int i = 0; i < 100; ++i) {  // for i in the [0:100) range
+    std::cout << i << '\t' << square(i) << '\n';
+    ++i; // what’s going on here? It smells like an error!
+}
+#+end_src
+
+لما تيجي تتبع الكود دا وتفهم اللي بيحصل فيه هتلاقي ان i بيحصلها increment مرتين علي مدار الloop، فاحنا هنبدأ ب i == 0 وبعد كدا في الiteration التانيه هتبقي ب 2 وهكذا، ودا هيؤدي لأننا هيطلعلنا الoutput متكون من 50 رقم بس بدل 100 وكلهم زوجيين، لو كانت دي نيتنا من الأول كان هيبقي افضل نعملها كدا:
+
+#+begin_src C
+// good code below
+for (int i = 0; i < 100; i += 2) {
+    std::cout << i << '\t' << square(i) << '\n';
+}
+#+end_src
+
+في نوع تاني من الfor-loops اسمه for each ودا هنتكلم عنه في اخر المحاضره بعد لما نشرح الvectors.
+
+* الfunctions
+ايه بقا حوار الfunction اللي اسمها square دي؟ دا اسمه function call، وبشكل ادق دا بيتقال عليه call to square مع ادخال i كargument. الfunction ما هي الا مجموعه من الstatements انت اديتلهم اسم، ممكن برضو ترجع قيمه بيتقال عليها return value. الstandard library فيها functions كتير مفيده جدا، زي مثلا ال ~()sqrt~ اللي استخدمناها المحاضره اللي فاتت، وفي functions كتير هنحتاج نكتبها بنفسنا، علي سبيل المثال ال square function بتاعتنا ممكن تتعمل بالشكل دا:
+
+#+begin_src C
+int square(int num) {
+	return num * num;
+}
+#+end_src
+
+اول سطر من الfunction دي بيعرفنا ان دي function، وانها اسمها square، وبتستقبل argument من نوع int (في الحاله دي اسمه num) وبترجع قيمه من نوع int.
+
+علي عكس باقي الdefinition الfunction مش objects، وهنا الint دي مش معناها ان الfunction دي من الtype int، الint هنا معناها انك تقدر تتوقع ان الfunction دي لما تستخدمها هترجعلك قيمه من نوع int.
+
+ممكن بعد كدا بقا نستخدم الfunction دي بأي شكل احنا عايزينه:
+
+#+begin_src C
+int x = square(2);  // x = 4
+std::cout << square(3) << " " << square(4); // prints 9 16
+int y = 5 + square(5);  // y == 30
+std::string z = square(6) // error, square returns int not string
+#+end_src
+
+بس لازم تديلها العدد والنوع الصح من الarguments، بص مثلا:
+
+#+begin_src C
+square(2);               // probably a mistake: unused return value
+int v1 = square();       // error : argument missing
+int v2 = square;         // error : parentheses missing
+int v3 = square(1,2);    // error : too many arguments
+int v4 = square("two");  // error : wrong type of argument; int expected
+#+end_src
+
+حتي لو الfunction بتreturn حاجه معينه، انت مازلت تقدر تنادي الfunction دي ومتستخدمش الreturn value بتاعتها، علي الرغم من ان دا غالبا هيكون خطأ منك لأن كدا الfunction call دي مهدره.
+
+الsyntax بتاع الfunction definition بيبقي شكله عامل كدا:
+
+#+begin_src text
+type-identifier function-identifier(parameter-list) {
+    function-body
+}
+#+end_src
+
+يعني type او return type وبعده identifier او name للfunction وبعده قائمه بالparameters اللي الfunctions بتستقبلها جوا قوسين وبعد كدا بتحط الfunction body بتاعك ودا اللي بيبقي فيه الstatements كلها اللي الfunction بتعملها grouped by curly braces.
+
+الparameter list ممكن تبقي فاضيه في حاله ان الfunction مش بتاخد input، وغالبا لو الfunction مش بتاخد input فهي برضو غالبا مش بتproduce output او بالأصح مش بتreturn حاجه، وفي الحاله دي ممكن نعمل الreturn type بتاعها void:
+
+#+begin_src C
+void say_sorry() {
+	std::cout << "I'm sorry uwu\n";
+}
+
+int main() {
+	say_sorry();
+}
+#+end_src
+
+** ايه فايده الfunctions؟
+إحنا بنعرّف function لما نكون محتاجين نعمل عملية حسابية أو منطقية معينة تكون ليها اسم، لأن دا ليه مميزات كتير اهمها:
+- بتخلي العملية منفصلة ومنظمة منطقيًا
+- بتخلي كود البرنامج أوضح (عشان بندي العملية اسم)
+- بتخلينا نقدر نستخدم الـ function دي أكتر من مرة في أماكن مختلفة
+- بتسهّل علينا اختبار الكود
+
+وهنشوف أمثلة كتير على الأسباب دي قدّام، وساعات هنشير للسبب اللي خلّانا نستخدم function معينة.
+
+خد بالك إن برامج العالم الحقيقي ممكن يكون فيها آلاف الـ functions، وبعض البرامج فيها مئات الآلاف. ومن غير ما نقسم الكود وندي كل جزء اسم، عمرنا ما كنّا هنعرف نكتب أو نفهم البرامج الكبيرة دي.
+
+كمان هتلاحظ بسرعة إن في functions مفيدة جدًا، وهتتعب لو كل شوية تكتب نفس الكود بدل ما تنادي على function واحدة.
+يعني مثلًا ممكن تكون مرتاح تكتب x*x و 7*7 و (x+7)*(x+7) بدل ما تكتب square(x) و square(7) و square(x+7) — وده عشان square عملية بسيطة.
+
+لكن جرّب تعمل كود الجذر التربيعي (اللي اسمه sqrt في ++C) بنفسك؟ هتلاقيه كبير ومعقّد شوية. فطبعًا تفضّل تكتب sqrt(x) بدل ما تكرر كود طويل. والأجمل إنك مش محتاج تبص على كود sqrt أصلاً، كفاية إنك عارف إن sqrt(x) معناها الجذر التربيعي لـ x — وخلاص.
+
+هتلاحظ ان دا بيطبق مفهومين مهمين جدا قلنا عليهم في اول المحاضره، الabstraction والdivide and conquer.
+- بتقسم البرنامج بتاعك لمجموعه من الfunctions وكل function ليه ويظفه محدده بتقوم بيها ومشكله معينه بتحلها
+- بتخبي الimplementation بتاع عمليه ممكن تكون معقده جدا زي انك تجيب الجذر التربيعي لرقم تحت اسم بسيط زي =()sqrt=
+
+
+لو كنا حابين اننا نبسط الloop في البرنامج بتاع الsquare اكتر شويه كان ممكن نعمل كدا:
+
+#+begin_src C
+void print_square(int x) {
+	std::cout << x << '\t' << x * x << '\n';
+}
+int main() {
+	for (int i = 0; i < 100; i++) {
+		print_square(i);
+	}
+}
+#+end_src
+
+بس هتلاحظ ان اولا دا مش ابسط بكتير من البرنامج الأصلي، والمشكله التانيه والأهم:
+- ان print_square تحسها function متخصصه اوي، بتعمل حاجه معينه ومحدده جدا وغلبا مش هيبقي ليها استخدام تاني بعدين
+  علي عكس ()square اللي تقدر تستخدمها في سياقات كتير
+- الfunction بتاعه ()square مش محتاجه documentation خالص تقريبا، هي اسمها اصلا شارح نفسه
+  علي عكس ()print_square اللي محتاجه تفسير لهي بتعمل ايه ووظيفتها ايه
+
+
+السبب في دا هو ان ()print_square بتعمل عمليتين غير مرتبطين منتقيا
+- بتحسب المربع
+- بتطبعه
+
+
+البرامج غالبا بتكون اسهل واحسن لو كل function بتقوم بمهمه واحده منطقيه واضحه وبسيطه، علشان كدا طبعا ()square تعتبر تصميم افضل.
+
+وأخيرًا، ليه استخدمنا square(i) بدل ما نكتب ببساطة i*i في البرنامج؟
+واحدة من أهداف استخدام الـ functions هي تبسيط الكود عن طريق فصل العمليات المعقدة في دوال ليها أسماء.
+وفي سنة 1949، مكنش فيه هاردوير بيقدر يعمل "ضرب" بشكل مباشر. وبالتالي، في النسخة الأصلية من البرنامج، i*i كانت عملية معقدة شوية، زي ما كنت هتعملها بإيدك على ورقة.
+
+كمان اللي كتب النسخة الأصلية دي، "ديفيد ويلر"، هو اللي اخترع فكرة الـ function (وكان اسمها وقتها "subroutine") في البرمجة الحديثة، فكان من المنطقي إننا نستخدمها كمثال هنا.
+
+----------
+*جرب دا:* اعمل الbody بتاع الfunction دي:
+
+#+begin_src C
+double power(double base, double exponenet) {
+	// your code here
+}
+#+end_src
+
+الfunction دي اسمها power، بتاخد منك أساس او base وأوس او exponent، فمثلا =;power(3,3)= المفروض ترجع 27
+----------
+
+** الfunction declaration
+لاحظت ان تقريبا كل المعلومات اللي انت محتاجها علشان تستخدم الfunction موجوده في اول سطر؟ يعني مثلا في المثال بتاع الfunction اللي اسمها power اللي انت لسه عاملها، مجرد ما نبص علي اول سطر فيها واللي هو ~double power(double base, double exponenet)~ هيبقي عندنا المعلومات الكافيه اننا نقول:
+
+#+begin_src C
+double four_squared = power(4,2);  // four_squared will be 16
+#+end_src
+
+إحنا مش محتاجين نبص على الـfunction body فعلًا.
+في البرامج الحقيقية، إحنا غالبًا مش عايزين نبص على جسم الـ function أصلًا.
+
+ليه أصلاً نبص على الكود الداخلي لدالة زي ()sqrt من الstandard library؟ إحنا عارفين إنها بتحسب الجذر التربيعي للرقم اللي بنبعته.
+
+وبرضه، ليه ممكن حد بيعدل علي الكود بتاعنا يبقي محتاج يشوف جسم دالة ()square اللي كتبناها؟
+ممكن يكون اه، بس في أغلب الوقت، إحنا مهتمين نعرف إزاي نستدعي الدالة، مش إزاي هي مكتوبة من جوه، لأن ده هيشتت تركيزنا.
+
+والكويس إن ++C بتوفر طريقة نقدر نوضح بيها إزاي نستدعي الـ function دي، من غير ما نعرض كل تفاصيل تعريفها. اسمها الdeclaration:
+
+#+begin_src C
+int square(int);
+double power(double);
+#+end_src
+
+لاحظ الsemicolon في الاخر، في الfunction declaration بنستخدم semicolon بدل الfunction body في الdefinition:
+
+#+begin_src C
+int square(int x) {
+	return x * x;
+}
+#+end_src
+
+يعني لو كل اللي انت عايزه علشان تستخدم function، ببساطة بتكتب – أو غالبًا بتعمل ~include#~ – الdeclaration بتاعها.
+الdefinition بتاع الfunction نفسه ممكن يكون في مكان تاني خالص.
+
+هنتكلم عن الأماكن دي في محاضرات قادمه.
+
+الفرق بين الdeclaration والdefinition مهم جدًا في البرامج الكبيرة،
+علشان نقدر نخلي معظم الكود بعيد عن عينينا ونركز بس على الجزء اللي شغالين عليه حاليًا، افتكر الdivide and conquer.
+
+* الvectors
+علشان نعمل أي حاجة مفيدة في برنامج، لازم يكون عندنا مجموعة بيانات نشتغل عليها.
+مثلاً، ممكن نحتاج:
+- قائمة أرقام تليفونات
+- أسماء لاعبي فريق كورة
+- الكورسات اللي بنذاكرها
+- الكتب اللي قريناها السنة اللي فاتت
+- كتالوج أغاني
+- اختيارات الدفع لعربية
+- توقعات الطقس للأسبوع الجاي
+- أسعار كاميرا في مواقع مختلفة
+
+الاحتمالات حرفيًا لا نهائية، وعشان كده استخدام مجموعات البيانات منتشر جدًا في البرامج.
+
+هنشوف بعدين طرق كتير نخزن بيها البيانات وأنواع تانيه من الcontainers والdata structures،
+بس دلوقتي، هنبدأ بواحدة من أبسط وأكتر الطرق المفيدة: vector.
+
+الvector هو مجموعه من الelements تقدر تaccess اي element فيه عن طريق حاجه اسمها index، علي سبيل المثال دا vector اسمه v:
+
+[[../../images/vector.png]]
+
+هتلاقي ان اول element بيبدأ بindex 0 وتاني element ب1 وهكذا لحد ما نوصل لأخر element اللي الindex بتاعه هيبقي عدد الelements في الvector ناقص واحد، او نقدر نقول بشكل اخر ]zero:size].
+
+احنا بنجيب element عن طريق اننا بنعمل subscripting لأسم الvector بالindex بتاع الelement، مثلا في المثال اللي فوق دا الvector اسمه v، فاحنا لو عايزين نجيب الelement التالت في الvector هنقول v[2]، وده هيساوي 9، وv[1] هتساوي 7 وهكذا. ولو هتلاحظ برضو في الرسمه، الvector ايضا بيخزن الsize بتاعه، في الحاله دي 6 لأنه فيه 6 elements.
+
+في ال++C ممكن نعمل vector زي دا كدا:
+
+#+begin_src C
+#include <vector>
+std::vector<int> v = {5, 7, 9, 4, 6, 8};
+#+end_src
+
+هتلاحظ اننا بنحدد الtype بتاع الelements اللي في الvector جوا ~<>~ وفي الحاله دي int، ممكن مثلا نعمل vector بيخزن strings بالشكل دا:
+
+#+begin_src C
+std::vector<std::string> philosopher = {"Kant", "Plato", "Hegel", "Nietzsche"};  // vector of 4 strings
+std::cout << philosopher[3] << '\n';  // output: Nietzsche
+#+end_src
+
+وبطبيعه الحال، الvector هيرفض انك تحط فيه elements من نوع غلط، مثلا:
+
+#+begin_src C
+philosopher[2] = 99;  // error : trying to assign an int to a string
+v[2] = "Hume";        // error : trying to assign a string to an int
+#+end_src
+
+ممكن برضو نdefine vector بsize معين منغير ما نحط قيم للelements، وفي الحاله دي كلهم بيتعملهم default initialization، مثلا:
+
+#+begin_src C
+std::vector<int> vi(6);  // a vector of 6 ints initialized to 0
+std::vector<std::string> vs(4)  // a vector of 4 strings initialized to "" or empty string
+#+end_src
+
+طبعا مينفعش تحاول تعمل access علي element من الvector مش موجود، مثلا:
+
+#+begin_src C
+vi[2000] = 4;  // runtime error
+#+end_src
+
+ليه run-time error؟ مش المفروض دا يكون compile-time؟ المحاضره الجايه هنتكلم عن انواع الerrors بالتفصيل وهيبقي فيها جذء خاص بالأيرورز بتاعه الsubscripting وهنشوف فيها الحوار دا
+
+** المرور علي عناصر الvector
+بما ان كل vector عارف الsize بتاعه، فاحنا ممكن نستخدم member function تجيبلنا الsize بتاعه، وده هيسمحلنا اننا نمر علي العناصر اللي فيه باستخدام loop، مثلا:
+
+#+begin_src C
+std::vector<int> v = {5, 7, 9, 4, 6, 8};
+for (int i = 0; i < v.size(); i++) {
+	std::cout << v[i] << '\n';
+}
+#+end_src
+
+هنا احنا بنستخدم =()v.size= علشان نجيب الsize بتاع الvector، لاحظ الmember access operator هنا أو ال =.= ودا بيقولنا ان ()size دي member function، وهنعرف بعدين يعني ايه member functions.
+
+ميزه الfunction دي انها بتسمحلنا اننا نعمل traversing علي الelements بتاعه v منغير ما نطلع برا الرينج، في الحاله دي الrange بتاع v هيبقي:
+
+#+begin_src text
+[0:v.size()[
+or
+[0:v.size()-1]
+#+end_src
+
+أول element هيبقي =v[0]= وأخر element هيبقي =v[v.size() - 1]= وفي حاله ان ~v.size() == 0~ دا معناه ان الvector دا فاضي،.
+
+وفي طريقه تانيه اننا نعمل loop علي الelements بتاع الvector:
+
+#+begin_src C
+std::vector<int> v = {5, 7, 9, 4, 6, 8};
+for (int i : v) {
+	std::cout << i << '\n';
+}
+#+end_src
+
+بنقرأ الحته بتاعه (int i : v) دي for each i in v او لكل i في v، علشان كدا بيتقال عليها for each loop.
+
+** الاضافه علي vector
+واحده من اهم مميزات الvector انك تقدر تضيف عليه elements، ساعات مثلا هتبدأ بempty vector مفيهوش عناصر، وهتعوز تزود عناصر فيه واحده واحده، وهنا هنستخدم member function تانيه اسمها ()push_back.
+الfunction دي بتزود عنصر في اخر الvector انت هتبقي محدده:
+
+[[../../images/push_back.png]]
+
+لاحظ الsyntax بتاع ~()push_back~ زيه زي الsyntax بتاع ~()size~ الاتنين member functions للvector ولازم تنادي عليهم بال ~.~.
+
+#+begin_src text
+object_name.member_function_name(argument_list)
+#+end_src
+
+خلينا ناخد مثال عن قد ايه ممكن مفهوم الأضافه للvector دا يكون مفيد:
+
+تعالي نبص على مثال واقعي شوية. في الغالب، بيكون عندنا سلسلة من القيم عايزين نقرأها جوه البرنامج علشان نعمل بيها حاجة.
+الحاجة دي ممكن تكون:
+- نرسم جراف بالقيم
+- نحسب الـ mean والـ median
+- نلاقي أكبر قيمة
+- نرتبهم
+- ندمجهم مع بيانات تانية
+- ندوّر على قيم "مهمة"
+- نقارنهم ببيانات تانية
+
+الموضوع مفتوح تمامًا، ومفيش حدود لنوع العمليات اللي ممكن نعملها على البيانات.
+بس أول خطوة: لازم ندخل البيانات دي في ذاكرة الكمبيوتر.
+
+كمثال عملي، هنفترض إننا عايزين نقرأ أرقام float بتمثّل درجات حرارة.
+
+#+begin_src C
+int main() { // reads emperatures into a vector
+    std::vector<double> temps;
+    for(double temp; std::cin >> temp;)
+        temps.push_back(temp);
+    // do something
+}
+#+end_src
+
+ايه اللي بيحصل هنا بظبط؟ تعالي ناخدها سطر سطر
+
+#+begin_src C
+std::vector<double> temps;
+#+end_src
+
+هنا هتلاقي اول حاجه بنعمل vector هنخزن فيه قيم من نوع double وسميناه temps اختصارا لtemperatures وهنخزن فيه مجموعه من درجات الحراره علي سبيل المثال
+
+في الloop اللي بعده؟
+
+#+begin_src C
+for(double temp; std::cin >> temp;)
+    temps.push_back(temp);
+#+end_src
+
+هنا احنا بنعمل اللي كنا بنتكلم عليه من شويه، بنقرأ double ونخزنه في متغير اسمه temp وبعد كدا بنضيفه للvector بتاع درجات الحراره المقروئه.
+
+وهنا لاحظ الloop بتاعتنا عامله ازاي، اول statement جوا الloop واللي هي ~;double temp~ بتdefine الcontrol variable بتاعنا، وبعد كدا بنخش علي شرط الloop واللي هو ~;std::cin >> temps~ ودا الشرط بتاع الloop.
+
+باختصار الشرط دا هيتنفذ كل مره او كل iteration، وامتي الشرط دا يبقي false والbody بتاع الloop ميتنفذش؟ لما عمليه القرائه تفشل، وفي حالتنا عمليه القرائه ممكن تفشل لسببين، يا اما EOF يا اما bad input الcin متقدرش تحطه في double.
+
+بعد لما ناخد الdata بتاعتنا فيvector ممكن بعد كدا نستخدمها، علي سبيل المثال تعالي نحسب المتوسط والوسيط أو mean and median.
+
+#+begin_src C
+#include <algorithm>
+
+int main() { // reads emperatures into a vector
+    std::vector<double> temps;
+    for(double temp; std::cin >> temp;)
+        temps.push_back(temp);
+    // compute the mean temperature
+    double sum = 0;
+    for (double temp: temps)
+        sum += temp;
+    std::cout << "the mean is " << sum/temps.size() << '\n';
+    // compute the median temperature
+    std::ranges::sort(temps);  // sort the temperatures
+    std::cout << "the median is " << temps[temps.size()/2] << '\n';
+}
+#+end_src
+
+
+* Drill
+1. Write a program that consists of a while-loop that (each time around the loop) reads in two ints and then prints them.
+2. Change the program to write out the smaller value is: followed by the smaller of the numbers and the larger value is: followed by the larger value.
+3. Augment the program so that it writes the line the numbers are equal (only) if they are equal.
+4. Change the program so that it uses doubles instead of ints.
+5. Change the program so that it writes out the numbers are almost equal after writing out which is the larger and the smaller if the two numbers differ by less than 1.0/100.
+6. Now change the body of the loop so that it reads just one double each time around. Define two variables to keep track of which is the smallest and which is the largest value you have seen so far. Each time through the loop write out the value entered. If it’s the smallest so far, write the smallest so far after the number. If it is the largest so far, write the largest so far after the number.
+7. Add a unit to each double entered; that is, enter values such as 10cm, 2.5in, 5ft, or 3.33m. Accept the four units: cm, m, in, ft. Assume conversion factors 1m==100cm, 1in==2.54cm, 1ft==12in. Read the unit indicator into a string. You may consider 12 m (with a space between the number and the unit) equivalent to 12m (without a space).
+8. Reject values without units or with ‘‘illegal’’ representations of units, such as y, yard, meter, km, and gallons.
+9. Keep track of the sum of values entered (as well as the smallest and the largest) and the number of values entered. When the loop ends, print the smallest, the largest, the number of values, and the sum of values. Note that to keep the sum, you have to decide on a unit to use for that sum; use meters.
+10. Keep all the values entered (converted into meters) in a vector. At the end, write out those values.
+11. Before writing out the values from the vector, sort them (that’ll make them come out in increasing order).
+
+
+* review
+1. What is a computation?
+2. What do we mean by inputs and outputs to a computation? Give examples.
+3. What are the three requirements a programmer should keep in mind when expressing computations?
+4. What does an expression do?
+5. What is the difference between a statement and an expression, as described in this chapter?
+6. What is an lvalue? List the operators that require an lvalue. Why do these operators, and not the others, require an lvalue?
+7. What is a symbolic constant and why do we use them?
+8. What is a literal?
+9. What is a magic constant? Give examples.
+10. What operators can be used on integers but not on floating-point numbers?
+11. What are some operators that can be used for strings?
+12. When would a programmer prefer a switch-statement to an if-statement?
+13. What are some common problems with switch-statements?
+14. What is the function of each part of the header line in a for-loop, and in what sequence are they executed?
+15. When should the for-loop be used and when should the while-loop be used?
+16. Describe what the line ~char foo(int x)~ means in a function definition.
+17. When should you define a separate function for part of a program? List reasons.
+18. What is the index of the third element of a vector?
+19. How do you write a for-loop that prints every element of a vector?
+20. What does ~vector<char> alphabet(26);~ do?
+21. Describe what ~push_back()~ does to a vector.
+22. What does vector’s member ~size()~ do?
+23. What makes vector so popular/useful?
+24. How do you sort the elements of a vector?
+
+
+* Exercises
+1. If you haven’t already, do the TRY THIS exercises from this chapter.
+2. Write a program that reads a string from input and then, for each character read, prints out the character and its integer value on a line.
+3. If we define the median of a sequence as ‘‘a number so that exactly as many elements come before it in the sequence as come after it,’’ write a program so that it always prints out a median for a givin list of integers. Hint: A median need not be an element of the sequence.
+4. Write a program to play a numbers guessing game. The user thinks of a number between 1 and 100 and your program asks questions to figure out what the number is (e.g., ‘‘I'm guessing you are thinking of 50? if now is it lower or higher?’’). Your program should be able to identify the number after asking no more than seven questions.
+5. Write a program that performs as a very simple calculator. Your calculator should be able to handle the four basic math operations – add, subtract, multiply, and divide – on two input values. Your program should prompt the user to enter three arguments: two double values and a character to represent an operation. If the entry arguments are 35.6, 24.1, and '+', the program output should be The sum of 35.6 and 24.1 is 59.7. In later lectures of this course, we look at a much more sophisticated simple calculator.
+6. Make a vector holding the ten string values "zero", "one", . . . "nine". Use that in a program that converts a digit to its corresponding spelled-out value; e.g., the input 7 gives the output seven. Have the same program, using the same input loop, convert spelled-out numbers into their digit form; e.g., the input seven gives the output 7.
+7. Modify the ‘‘mini calculator’’ from exercise 5 to accept (just) single-digit numbers written as either digits or spelled out (e.g., seven + 3 should output 10).
+8. There is an old story that the emperor wanted to thank the inventor of the game of chess and asked the inventor to name his reward. The inventor asked for one grain of rice for the first square, 2 for the second, 4 for the third, and so on, doubling for each of the 64 squares. That may sound modest, but there wasn’t that much rice in the empire! Write a program to calculate how many squares are required to give the inventor at least 1000 grains of rice, at least 1,000,000 grains, and at least 1,000,000,000 grains. You’ll need a loop, of course, and probably an int to keep track of which square you are at, an int to keep the number of grains on the current square, and an int to keep track of the grains on all previous squares. We suggest that you write out the value of all your variables for each iteration of the loop so that you can see what’s going on.
+9. Create a program to find all the prime numbers between 1 and 100. There is a classic method for doing this, called the ‘‘Sieve of Eratosthenes.’’ If you don’t know that method, get on the Web and look it up. Write your program using this method.
+10. Write a program that takes an input value n and then finds the first n primes.
+11. In the drill, you wrote a program that, given a series of numbers, found the max and min of that series. The number that appears the most times in a sequence is called the mode. Create a program that finds the mode of a set of positive integers.
+12. Write a program to solve quadratic equations. A quadratic equation is of the form ax2 + bx + c = 0. If you don’t know the formula for solving such an expression, do some research. Remember, researching how to solve a problem is often necessary before a programmer can teach the computer how to solve it. Use doubles for the user inputs for a, b, and c. Since there are two solutions to a quadratic equation, output both x1 and x2.
+13. Write a program where you first enter a set of name-and-value pairs, such as Joe 17 and Barbara 22. For each pair, add the name to a vector called names and the number to a vector called scores (in corresponding positions, so that if names[7]=="Joe" then scores[7]==17). Terminate input with NoName 0. Check that each name is unique and terminate with an error message if a name is entered twice. Write out all the (name,score) pairs, one per line.
+14. Modify the program from the previous exercise so that once you have entered the name-and-value pairs, you enter another loop and ask for names, when you enter a name, the program will output the corresponding score or name not found.
+15. Modify the program from the previous exercise so that once you have entered the name-and-value pairs, you enter another loop and ask for scores, when you enter a value, the program will output all the names with that score or score not found.

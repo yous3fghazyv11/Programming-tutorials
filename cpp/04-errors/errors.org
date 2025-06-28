@@ -1,0 +1,545 @@
+#+TITLE: ازاي تتعامل مع الايرورز
+#+AUTHOR: Yousef Ghazy
+#+OPTIONS: toc:nil
+
+المحاضره دي هتتكلم عن الerrors في البرامج بتاعتنا وازاي نلاقيها ونصلحها
+
+* الفهرس :toc:
+- [[#مقدمه][مقدمه]]
+- [[#مصادر-الerrors][مصادر الerrors]]
+- [[#الcompile-time-errors][الcompile-time errors]]
+- [[#الsyntax-errors][الsyntax errors]]
+- [[#الtype-errors][الtype errors]]
+- [[#الlink-time-errors][الlink-time errors]]
+- [[#الrun-time-errors][الrun-time errors]]
+  - [[#الcaller-يتعامل-مع-الerrors][الcaller يتعامل مع الerrors]]
+  - [[#الcallee-هو-اللي-يتعامل-مع-الerrors][الcallee هو اللي يتعامل مع الerrors]]
+  - [[#ازاي-نreport-الerror][ازاي نreport الerror؟]]
+- [[#الexceptions][الexceptions]]
+
+* مقدمه
+احنا ذكرنا كلمه error كتير جدا في المحاضرات اللي فاتت، ولو كنت عملت الdrill وشويه exercises انت غالبا عندك فكره ليه، الerrors لا يمكن تجنبها انثاء كتابه اي برنامج.
+
+غالبا انت في كل برنامج منهم كنت دايما بعد لما بتفتكر انك خلصت البرنامج بتلاقي لما تيجي تشغله انه بيعمل حاجه غير اللي انت كنت عايزه يعملها، وتلاقي نفسك رجعت تبص علي الكود بتحاول تفهم الكود اللي انت كتبته بيعمل ايه. او ممكن تكون لاحظت ان كتير من البرامج اللي احنا كتبناها سهل جدا اننا نخليها تعمل حاجات غريبه لو ادينالها bad input.
+
+الشابتر دا هنحاول نتأكد ان من هنا ورايح البرامج اللي بنعملها تكون خاليه تماما من الerrors، او علي الاقل الerrors اللي احنا بنعتبرها مينفعش تكون موجوده.
+
+في طرق كتير لتصنيف الـ errors. مثلاً:
+- الCompile-time errors: دي الـ errors اللي الـ compiler بيكتشفها. وممكن نقسمها أكتر حسب القواعد اللي بتكسرها:
+  * الSyntax errors
+  * الType errors
+- الLink-time errors: دي الـ errors اللي الـ linker بيشوفها وهو بيجمع الـ object files علشان يطلع الـ executable.
+- الRun-time errors: دي اللي بتحصل وقت ما البرنامج بيشتغل. وممكن نقسمها كده:
+  * اللي الـ computer أو الـ OS بيكتشفها
+  * اللي الـ library (زي الـ standard library) بيكتشفها
+  * اللي الـ user code بيكتشفها
+(النوع ده كمان بنسميه Logic errors)
+
+بس الليستة دي متفائلة شوية، لإننا "نسينا" نوعين من أسوأ الـ errors:
+- الUndetected logic errors اللي بتؤدي لـ crash أو نتايج غلط من غير ما حد يلاحظ.
+- ان يكون في اختلاف بين اللي الـ user محتاجه واللي الـ code بيعمله فعلًا.
+
+
+سهل قوي نقول إن شغلانتنا كـprogrammers هي إننا نخلّي البرنامج خالي تماما من أي errors. وده طبعًا هو المثالي، بس غالبًا مش عملي. في الحقيقة، في البرامج الكبيرة في الواقع، بيكون حتى صعب نحدد يعني إيه "كل الـ errors".
+
+يعني مثلًا، لو حد شد سلك الباور من الكمبيوتر وانت البرنامج شغال، هل ده error المفروض كنت تتعامل معاه؟
+في الغالب، الرد بيكون "طبعًا لأ".
+لكن لو البرنامج بتاعك بيتابع حالة مريض، أو بيشغّل سنترال تليفونات؟
+ساعتها، ممكن المستخدم يتوقّع إن السيستم (اللي برنامجك جزء منه) يقدر يتصرف بشكل معقول حتى لو الكهربا قطعت أو حصل خلل في الـ memory بسبب شعاع كوني.
+
+السؤال المهم هنا بيبقى:
+هل البرنامج بتاعي المفروض يتعامل مع الerror دا؟
+
+معدا لو explicitly قلنا عكس كدا، احنا هنفترض ان البرنامج بتاعك:
+- المفروض يطلع نتايج صح لكل الlegal inputs
+- يطلع error messages مظبوطه لكل الillegal inputs
+
+
+المطالب دي تعتبر اقل حاجه لازم تبقي موجوده في البرنامج بتاعك علشان نقدر نقول عليه برنامج كويس، واننا نعمل برامج كويسه هو هدفنا.
+
+وإحنا بنكتب برامج، طبيعي جدًا إن errors تحصل ومش ممكن نتفاداها بالكامل؛ السؤال الحقيقي هو: إزاي نتعامل معاها؟
+
+تجنب واكتشاف وتصحيح الـ errors بياخد أكتر من 90% من مجهود شغل أي برنامج كبير.
+ولو البرنامج safety-critical (زي اللي بيتحكم في طيارة أو جهاز طبي)، فالمجهود ده ممكن يبقى أكتر كمان
+
+* مصادر الerrors
+فيه كذا مصدر ممكن يسبب errors في البرامج، منها:
+1. اولا Poor specification: لو مش محددين بالظبط البرنامج المفروض يعمل إيه، غالبًا مش هنهتم بالتفاصيل أو الedge cases، وساعتها هتفوتنا حالات معينة مش هنتعامل معاها صح (يعني ممكن input معين يبوّظ الدنيا أو يدي نتايج غلط).
+2. الIncomplete programs: وإحنا شغالين على البرنامج، طبيعي يبقى فيه حالات لسه ما تعاملناش معاها. ده عادي. المهم إننا نعرف إمتى نكون فعلاً غطّينا كل الحالات.
+3. الUnexpected arguments: أي function بتاخد arguments، ولو جالها argument مش بنتعامل معاه، يبقى عندنا مشكلة. مثال: لو نادينا sqrt(-1.2)، ده رياضيا مش صح.
+4. الUnexpected input: البرامج دايمًا بتقرأ بيانات (من الكيبورد، من فايلات، من الnetwork...). البرنامج بيتوقّع إن المستخدم يدخل رقم مثلاً، طب إيه اللي يحصل لو كتب "aw, shut up!" بدل ما يكتب رقم؟ ساعتها يحصل error.
+5. الUnexpected state: أغلب البرامج بتخزّن بيانات كتير (أو ما يُعرف بـ state) علشان باقي أجزاء البرنامج تستخدمها. زي: لستة أسماء، نمر تليفونات، أو vector فيه درجات حرارة. طب لو البيانات دي ناقصة أو فيها غلط؟ البرنامج لازم يعرف يتصرف.
+6. الLogical errors: دي الأكواد اللي مش بتعمل اللي المفروض تعمله. يعني مفيش crash، بس النتيجة غلط. النوع ده لازم نكتشفه ونعالجه بنفسنا.
+
+
+القائمة دي مفيدة كـ checklist نراجع بيها إحنا وصلنا لفين في شغل البرنامج.
+مفيش برنامج نقدر نقول إنه "جاهز" غير لما نكون فكّرنا في كل المصادر دي للـ errors.
+وفي الحقيقة، من الحكمة إننا نبدأ ناخدهم في اعتبارنا من أول المشروع، لإن البرنامج اللي اتلمّ بسرعة ومن غير تفكير في الـ errors، غالبًا مش هيتصلّح غير بإعادة كتابة كاملة.
+
+
+* الcompile-time errors
+وإنت بتكتب برامج، أول خط دفاع ليك ضد errors هو الـ compiler. قبل ما يطلع الكود النهائي، الـ compiler بيحلل الكود علشان يكتشف syntax errors وtype errors. وما يسمحلكش تكمل غير لو اتأكد إن البرنامج ماشي مع قواعد اللغة.
+
+كتير من الـ errors اللي الـ compiler بيطلعها بتكون بس "أغلاط غبية" زي typos أو edits ناقصة.
+بس فيه كمان errors بتيجي من إنك مش فاهم كويس إزاي أجزاء البرنامج بتشتغل مع بعض.
+
+في الأول، المبرمج المبتدئ بيحس إن الـ compiler بيركز اوي في تفاصيل ممكن متكونش مهمه.
+بس لما تتعلم تستخدم إمكانيات اللغة – وخصوصًا الـ type system – علشان تعبّر بيها عن أفكارك، هتبتدي تحترم قدرة الـ compiler على إنه يلقط مشاكل كانت ممكن تضيع منك ساعات علشان تكتشفها.
+
+علي سبيل المثال، تعالي نشوف بعض الcallings للfunction البسيطه دي:
+
+#+begin_src C
+int area(int length, int width); // calculate area of a rectangle
+#+end_src
+
+* الsyntax errors
+
+#+begin_src C
+int s1 = area(7,2; // error: ) missing
+int s2 = area(7,2) // error: ; missing
+Int s3 = area(7,2); // error: Int (with a capitalized ’i’) is not a type
+int s4 = area('7,2); // error: non-ter minated character ’; terminating ’ is missing)
+#+end_src
+
+كل سطر من دول فيه syntax error، يعني الكود مش مكتوب بشكل صح حسب قواعد ++C، وعلشان كده الـ compiler بيرفضه.
+
+المشكلة إن syntax errors مش دايمًا بيكون سهل شرحها بشكل يخلّي المبرمج يفهمها بسهولة.
+ليه؟ لإن الـ compiler ساعات بيضطر يكمّل قراءة شوية بعد الـ error علشان يتأكد إن فيه فعلاً غلط.
+وده بيخلّي الرسالة اللي بتظهرلك ممكن تكون مش واضحة، أو حتى بتشاور على سطر تاني قدّام في الكود، مش على السطر اللي فيه الغلط فعلًا.
+
+يعني لما تشوف رسالة syntax error، وبصيت على السطر اللي الـ compiler أشار عليه وما لقيتش حاجة،
+بص على السطر اللي قبله، غالبًا الغلط هناك.
+
+افتكر كمان إن الـ compiler ما يعرفش إنت كنت عايز تعمل إيه، هو بس بيقولك إنت كتبت إيه، فمش هيطلعلك رسالة من نوع:
+
+"إنت كتبت Int بالغلط، المفروض تكتب int، الحرف الأول small!"
+
+لا، اللي هيقوله ممكن يبقى حاجة زي:
+
+#+begin_src text
+Syntax error: missing ';' before identifier 's3'
+'s3' missing storage-class or type identifiers
+'Int' missing storage-class or type identifiers
+#+end_src
+
+الرسائل دي بتكون غامضة في الأول، ولغتها ممكن تبان تقيلة،
+بس مع الوقت هتتعود عليها، وهتعرف تقراها بسرعة.
+
+يعني مثلًا، لو ظهرتلك الرسالة دي، تقدر تفهم منها:
+
+"فيه syntax error قبل s3، والغلط غالبًا ليه علاقة بـ Int أو بـ s3 نفسها."
+
+وساعتها، الموضوع مش صعب... مش محتاج تكون عالم صواريخ علشان تكتشف الغلط.
+
+* الtype errors
+أول ما تخلّص من syntax errors، الـ compiler هيبدأ يطلعلك type errors؛ يعني هيقولك إن فيه اختلاف بين أنواع الvariables أو الـ functions اللي إنت عرّفتها (أو نسيت تعرّفها)، وبين أنواع القيم أو الـ expressions اللي بتحاول تديها ليهم أو تمرّرها كـ arguments.
+
+مثال:
+
+#+begin_src C
+int x0 = arena(7,2); // error : undeclared function
+int x1 = area(7); // error : wrong number of arguments
+int x2 = area("seven",2); // error : 1st argument has a wrong type
+#+end_src
+
+تعال نشوف الغلط في كل واحدة:
+- الcall الأولي ~arena(7,2)~:
+  هنا كتبنا arena بدل area، يعني غلط إملائي. فالـ compiler بيفترض إنك عايز تنادي function اسمها arena.
+  ولو مفيش حاجة متعرفة بالاسم ده، هيقولك undeclared function.
+  بس لو فيه فعلاً function اسمها arena وبتقبل (7,2)، فده أكثر خطوره:
+  البرنامج هيشتغل، بس هيعمل حاجة إنت مش قاصدها. وده اسمه logic error
+- الcall التانيه ~area(7)~:
+  هنا عدد الـ arguments مش كافي. في ++C، كل function call لازم يبقى فيه العدد الصحيح من الـ arguments، وبالترتيب والنوع الصح.
+  وده سبب مهم يخلي استخدام الـ type system يساعدك تتجنب run-time errors
+- الcall التالته ~area("seven", 2)~:
+  ممكن تتخيل إن الكمبيوتر هيعرف إن "seven" يعني 7، بس لأ.
+  لو الـ function محتاجة int، مش ينفع تبعتلها string.
+  ال ++C فعلاً بتدعم شوية implicit type conversions لكن string → int مش واحدة منهم.
+  ولو فكرت في نداءات زي:
+  + مثلا ~area("Hovel lane", 2)~
+  + او ~area("7,2")~
+  + او ~area("sieben", "dos")~
+  هتلاحظ إن مفيش طريقة للكمبيوتر يعرف إنت كنت تقصد إيه بالظبط.
+
+
+ودي بس شوية أمثلة، لكن في الحقيقة، فيه كمية ضخمة من الأخطاء ممكن الـ compiler يساعدك تكتشفها وتصلحها قبل ما البرنامج يشتغل أصلاً.
+ودي من الحاجات اللي بتخلّي C قوية جدًا لما تعرف تستخدم أدواتها صح.
+
+وإنت شغال مع الـ compiler، ساعات هتتمنى لو كان "ذكي" كفاية علشان يفهم إنت كنت تقصد إيه،
+يعني تتمنى إن بعض الـ errors اللي بيطلعها ما تكونش errors أصلاً.
+وده إحساس طبيعي.
+
+المفاجأة بقى؟ لما تبقى مبرمج عندك خبرة، هتبتدي تتمنى إن الـ compiler يرفض كود أكتر، مش أقل!
+
+بص على الأمثلة دي:
+
+#+begin_src C
+int x4 = area(10,−7); // OK: but what is a rectangle with a width of minus 7?
+int x5 = area(10.7,9.3); // OK: but calls area(10,9)
+char x6 = area(100,9999); // OK: but truncates the result
+#+end_src
+
+- في x4:
+  الـ compiler مش هيقولك فيه غلط. من وجهة نظره، ~area(10, -7)~ تمام:
+  الـ function بتطلب 2 integers، وإنت فعلاً إدّيتهم.
+  مفيش قانون بيقول إن الأرقام لازم تبقى موجبة، فـعادي.
+- في x5:
+  ممكن الـ compiler الكويس ينبهك إن فيه تحويل تلقائي من double لـ int، وده معناه إن 10.7 بقت 10، و9.3 بقت 9.
+  بس حسب قواعد اللغة، التحويل ده مسموح، فالـ compiler ما يقدرش يرفض الكود.
+  لو إنت فعلًا ناوي تعمل narrowing conversion، يفضل تكتبه صراحة وتعمل explicit converstion.
+- في x6:
+  الـ result من area(100,9999) ممكن تبقى كبيرة جدًا علشان تتخزن في variable من نوع char، فهيحصلها truncation، وبرضه compiler مش هيسألك.
+
+
+ومع الوقت والخبرة، هتعرف إزاي تستفيد من قدرات الـ compiler في اكتشاف الأخطاء.
+
+لكن خد بالك:
+مجرد إن البرنامج "compiled بنجاح" مش معناه إنه شغال صح.
+وحتى لو اشتغل، غالبًا هيطلع نتايج غلط لحد ما تكتشف الlogical errors اللي فيه.
+
+وفيه أدوات تانية بتساعد إنها تكتشف حاجات ممكن تكون مش مخالفة لقوانين اللغة، بس إحنا كمبرمجين بنحب نعتبرها غلط.
+
+وأغلب الأدوات دي بتبقى domain-specific، يعني مفيدة في أنواع معينة من البرامج.
+من الأمثلة على كده أدوات بتنفّذ قواعد [C Core Guidelines]، ودي أدوات قوية بتساعدك تكتب كود أنضف وأأمن.
+
+* الlink-time errors
+أي برنامج بيتكوّن من كذا جزء متكامل، كل جزء منهم بيتعمله compile لوحده، وده اللي بنسميه translation unit أو module.
+
+كل function في البرنامج لازم تكون:
+- معمولها declaration بنفس الـ type (يعني نفس نوع القيمة اللي بترجعها ونفس أنواع الـ arguments) في كل مكان بتستخدم فيه.
+- وكمان لازم يكون ليها تعريف (definition) واحد بس في البرنامج كله.
+
+لو أي واحدة من القاعدتين دي اتكسرت، الـ linker هيطلع error.
+
+
+#+begin_src C
+int area(int length, int width); // declaration for a function that calculates the area of a rectangle
+int main() {
+    int x = area(2, 3);  // function call
+}
+#+end_src
+
+الكود اللي فوق هيشتغل في الـ compiler عادي، بس وقت الـ linking هيطلع error بيقول إن مفيش تعريف للـ ~()area~.
+
+عشان الكود يشتغل تمام، لازم يكون فيه تعريف حقيقي للـ ~()area~ ، بالشكل ده مثلًا:
+
+#+begin_src C
+int area(int length, int width); // function declaration
+
+int area(int x, int y) { // function definition
+    return x * y;
+}
+
+int main() {
+    int x = area(2, 3);  // function call
+}
+#+end_src
+
+خلي بالك: لازم يكون نفس الاسم ونفس الأنواع بالظبط.
+
+ودي امثله علي بعض الdefinitions اللي مش هتنفع:
+
+#+begin_src C
+double area(double x, double y) { ... }    // wrong return type
+int area(int x, int y, char unit) { ... }  // wrong number of arguments
+#+end_src
+
+ملاحظة مهمة:
+
+لو كتبت اسم function غلط، غالبًا مش هتستنى لحد الـ linker يطلعلك الغلط. الـ compiler نفسه هيقولك إنك بتحاول تستدعي function مش متصرّح عنها، وده كويس لأنه بيخلّي الغلط يتكشف بدري وأسهل في التصليح.
+
+نفس القواعد اللي فوق دي مش بس للـ functions، لكن كمان لأي حاجة تانية في البرنامج زي:
+- المتغيرات (variables)
+- الأنواع (types)
+
+لازم يكون فيه تعريف واحد بس لكل اسم، لكن ممكن يكون فيه تصريحات كتير بشرط إنها كلها تكون متطابقة.
+
+في المستقبل هنتكلم اكتر عن الdeclarations والdefinitions
+
+
+* الrun-time errors
+بمجرد ما تخلّص من أخطاء الـ compiler والـ linker، البرنامج هيبدأ يشتغل.
+بس في العادة، اللي بيحصل بعدها واحد من حاجتين:
+- يا إما البرنامج مبيطلعش أي output
+- يا إما الـ output اللي بيطلع غلط
+
+وده ممكن يحصل لأسباب كتير:
+
+ممكن تكون فاهم منطق البرنامج غلط أو كتبت كود غير اللي كنت متخيله أو يمكن عملت غلطة بسيطة في شرط if مثلًا أو حاجة مشابهة
+
+النوع ده من الأخطاء بنسميه logic error، وده بيكون من أصعب أنواع الأخطاء في الاكتشاف والإصلاح،
+لأن في المرحلة دي، الكمبيوتر بيعمل بالظبط اللي إنت طلبته منه، المشكلة إن اللي إنت طلبته ماكانش هو اللي إنت كنت "تقصد" تعمله.
+
+دلوقتي دورك كمبرمج إنك تفهم إيه اللي كتبته غلط، رغم إنك كنت فاكر إنك كتبته صح.
+وساعات بتكتشف الأخطاء، بس مش دايمًا بتبقى عارف تتعامل معاها إزاي وقت التشغيل.
+
+علي سبيل المثال:
+
+#+begin_src C
+int area(int length, int width) {
+// calculate area of a rectangle
+    return length∗width;
+}
+int framed_area(int x, int y) {
+// calculate area within frame
+    return area(x - 2,y - 2);
+}
+void test(int x, int y, int z) {
+    int area1 = area(x,y);
+    int area2 = framed_area(1,z);
+    int area3 = framed_area(y,z);
+    double ratio = static_cast<double>(area1)/area3; // convert to double to get floating-point division
+    // ...
+}
+
+int main() {
+    test(-1, 2, 3);
+}
+#+end_src
+
+هنا احنا عملنا شويه functions بسيطه جدا، الأولي area بتحسن الarea بتاعه مستطيل معين بمعلوميه طوله وعرضه، التانيه بتحسب الarea بتاعه مستطيل حواليه فريم سمكه 2، وبرضو بتحسبه بمعلوميه طوله وعرضه.
+
+الfunction التالته مش بتعمل حاجه غير انها بتستخدم الfunctions دول وتحسب بيهم شويه قيم، وزي ما احنا عارفين ان قسمه integer مع integer هتطلع integer ولو في اي حاجه بعد العلامه العشريه هتتشال، علشان كدا حولنا area1 لdouble.
+
+احنا عملنا دا في function خاصه بيها وسميناها test ومحطيناهاش في الmain مخصوص علشان نخلي المشكله اصعب واكثر غموضا للhuman reader واصعب علي الcompiler انه يلقطها.
+
+لو جينا نشغل البرنامج دا هيحصل مشاكل كتير:
+
+اول هتلاقي ان القيم اللي دخلناها علي test هتؤدي لقيم سالبه، القيم السالبه دي المفروض بتمثل مساحات، يعني عندك مثلا area1 هتبقي 2- وarea2 هتبقي ب 1-، هل المفروض اننا نقبل القيم دي؟
+
+طبعا الاجابه هتبقي لأ. طب نحل دا ازاي؟
+
+ممكن تقول ان الحل هو اننا نغير القيم اللي بندخلها علي test ونبدلها بقيم منطقيه اكتر، وفعلا دا هيحل المشكله بس افرض لو كنا مش احنا اللي متحكمين في الinput للfunctions دي؟ افرض كنا بنخلي اليوزر هو اللي يدخل الinput.
+
+طب افرض ان الfunctions دي مكناش بنكتبها لنفسنا اصلا وكنا مثلا شغالين علي library مثلا وفي حد تاني هو اللي بيستخدم الfunctions دي؟
+
+هنا الاجابه هتبدأ توضح شويه وهي اننا محتاجين تيكنيك يسمحلنا نرفض القيم الغلط دي ونرجع errors منطقيه توضح ان القيم اللي احنا بنحاول ندخلها علي الfunctions دي غلط وهؤدي لمساحه بالسالب.
+
+بس السؤال الأهم هنا هو ازاي هنرفض القيم دي؟ هل المفروض الfunctions هي اللي تتأكد ان القيم اللي داخله ليها "صح" وترفض اي قيم "غلط"؟ ولا المفروض ان واحنا بننادي علي الfunctions نتأكد اننا بندخلها قيم "صح"؟
+
+بس قبل ما نجاوب علي الأسئله دي، بص احنا بنحسب الratio ازاي:
+
+#+begin_src C
+double ratio = double(area1) / area3;
+#+end_src
+
+قد تبدو عمليه حسابيه بسيطه وبريئه خالص، لو انت شايفها كدا بص تاني، area3 هتبقي بصفر، احنا هنا بنقسم علي صفر. وده هيخلي الكمبيوتر يوقف تنفيذ البرنامج ويطلع hardware-detected error بerror message مش مفهومه كدا ليها علاقه بالhardware.
+
+دي نوعيه الerrors اللي انت --او اليوزر-- هتحتاج تتعامل معاها وانت بتستخدم البرنامج لو مخدتش بالك واتعاملت بشكل كويس مع الrun-time errors في الكود بتاعك.
+
+عندنا حلين للتعامل مع الـ bad arguments في area():
+- يا إما اللي بيستدعي الدالة هو اللي يتحمل مسؤولية التأكد من صحة القيم قبل ما يبعتها (the caller deals with the errors).
+- يا إما الدالة نفسها (area) هي اللي تتأكد من القيم وتتصرف لو فيها حاجة غلط (the callee deals with the error).
+
+** الcaller يتعامل مع الerrors
+تعالي نجرب اول حل، وهو انك تخلي اللي بيستخدم الfunction هو اللي بيتعامل مع الerrors، وده هيبقي الحل اللي احنا مجبرين علي في حاله مثلا ان area كانت function في library ما واحنا مش قادرين نعدل عليها لسبب ما.
+
+انك تحمي الcalls بتاعه area في test من الbad input نوعا ما سهل:
+
+#+begin_src C
+if (x <= 0)
+    throw std::runtime_error("non−positive x");
+if (y <= 0)
+    throw std::runtime_error("non−positive y");
+int area1 = area(x, y);
+#+end_src
+
+السؤال هو هنعمل ايه في حاله اننا بنحاول ندخل bad input؟ هنا احنا قررنا نعمل throw لruntime_error من الstandard library، اللي بيحصل لما بتعمل كدا ان البرنامج بيterminate بsystem error message زائد الerror message اللي في الstring اللي انت بتدخله كargument. لو عايز تكتب الerror message الخاصه بيك، او تعمل حاجه تانيه غير انك تterminate البرنامج بerror message، لازم تعمل catch للthrow دي وهنشوف بعد كدا يعني ايه وازاي.
+
+لو محتجناش اننا نطبع error message مختلفه لكل argument كان ممكن نعملها بالشكل دا:
+
+#+begin_src C
+if (x <= 0 || y <= 0)
+	throw std::runtime_error("non positve area() argument");
+int area1 = area(x, y);
+#+end_src
+
+علشان نتأكد ان ()area مش بيخشلها اي arguments غلط هنحتاج نتأكد ان calls بتاعه ()framed_area تبقي اكبر من 2، وساعتها هيبقي الكود شكله كدا:
+
+#+begin_src C
+if (x <= 0 || y <= 0)
+	throw std::runtime_error("non positve area() argument");
+int area1 = area(x, y);
+
+if (z <= 2)
+	throw std::runtime_error("non−positive 2nd area() argument called by framed_area()")
+int area2 = framed_area(1,z);
+
+if (y <= 2 || z <= 2)
+	throw std::runtime_error("non−positive area() argument called by framed_area()")
+int area3 = framed_area(y,z);
+
+double ratio = static_cast<double>(area1)/area3; // convert to double to get floating-point division
+#+end_src
+
+غير ان الكود دا فوضاوي جدا، هو كمان فيه خطأ جوهري، وهو اننا علشان نكتب الكود دا احنا محتاجين نبقي عارفين الimplementation بتاع framed_area وانها بتطرح 2 من الx والy قبل ما تدخلهم علي ()area كlength وwidth.
+
+بس احنا في الطبيعي المفروض منبقاش عارفين دا! زي ما قلنا الfunctions لازم تكون abstract قدر الامكان، وغير كدا افرض حد قرر يعدل framed_area علشان تطرح 1 بدل 2، ساعتها احنا هنروح نشوف كل call لframed_area ونروح علي الerror checking بتاعها ونغيره ل1 بدل 2، وكمان 2 في الحاله دي تعتبر مثال علي الmagic constants، خلينا ندي اسم للقيمه اللي بتتطرح من framed_area
+
+#+begin_src C
+constexpr int 2 = 2;
+int framed_area(int x, int y) {
+// calculate area within frame
+    return area(x−frame_width,y−frame_width);
+}
+#+end_src
+
+وبعدها ممكن نستخدم الأسم دا واحنا بنحمي الcalls بتاعه framed_area بعد كدا:
+
+#+begin_src C
+if (x <= 0 || y <= 0)
+	throw std::runtime_error("non positve area() argument");
+int area1 = area(x, y);
+
+if (1 − frame_width <= 0 || z − frame_width <= 0)
+    error("non−positive argument for area() called by framed_area()");
+int area2 = framed_area(1,z);
+
+if (y − frame_width <= 0 || z − frame_width <= 0)
+    error("non−positive argument for area() called by framed_area()");
+int area3 = framed_area(y,z);
+
+double ratio = static_cast<double>(area1)/area3; // convert to double to get floating-point division
+#+end_src
+
+بص كدا علي الكود دا، هل انت شايفه شكله حلو؟ سهل القرائه؟ انا بصراحه شايفه قبيح جدا، احنا بس علشان نعالج مشكله ان area يخلها arguments غلط، احنا ضربنا عدد السطور في 3، وكمان عملنا expose لimplementation detail في framed_area، اكيد لازم يكون في طريقه احسن من كدا
+
+** الcallee هو اللي يتعامل مع الerrors
+لو عايزين نتcheck لو الarguments valid جوا الfunctions نفسها فالموضوع سهل:
+
+#+begin_src C
+int framed_area(int x, int y) {
+// calculate area within frame
+    constexpr int frame_width = 2;
+	if (x <= frame_width || y <= frame_width)
+		throw std::runtime_error("non−positive argument for area() called by framed_area()");
+    return area(x - frame_width, y - frame_width);
+}
+#+end_src
+
+دا احسن بكتير، وبكده احنا مش محتاجين نكتب test لكل مره ننادي فيها علي framed_area، لأن لو الfunction دي فعلا مفيده، ممكن نبص نلاقي في مشروع كبير احنا بنستخدمها مئات المرات عادي، مش هنقعد كل مره نcheck الarguments بتاعتها قبل ما نستخدمها.
+
+وكمان هتلاقي اننا بنعمل encapsulation محترم للimplementation details بتاعه الfunction ومش محتاجين نexpose الframe_width خلاص.
+
+تعالي نعمل نفس الكلام في ~()area~:
+
+#+begin_src C
+int area(int length, int width) {
+// calculate area of a rectangle
+	if (length <= 0 || width <= 0)
+		throw std::runtime_error("non positve area() argument");
+    return length∗width;
+}
+#+end_src
+
+الحقيقه ان بعد لما عملنا كدا احنا معدناش مضطرين اننا نحط الcheck بتاعنا في framed_area الا لو كنا عايزين error message خاصه بيها توضح اكتر المشكله حصلت فين بظبط.
+
+ويبقي الكود الاخير كدا:
+
+#+begin_src C
+int area(int length, int width) {
+// calculate area of a rectangle
+	if (length <= 0 || width <= 0)
+		throw std::runtime_error("non positve area() argument");
+    return length∗width;
+}
+int framed_area(int x, int y) {
+// calculate area within frame
+    return area(x - 2,y - 2);
+}
+void test(int x, int y, int z) {
+    int area1 = area(x,y);
+    int area2 = framed_area(1,z);
+    int area3 = framed_area(y,z);
+    double ratio = static_cast<double>(area1)/area3; // convert to double to get floating-point division
+    // ...
+}
+
+int main() {
+    test(-1, 2, 3);
+}
+#+end_src
+
+انك تتcheck من arguments جوا الfunction واضح انه ابسط بكتير، طيب ليه الناس مش دايمًا بتعمل كده؟ الإهمال في error handling سبب، والsloppiness سبب تاني، بس فيه أسباب محترمه كمان:
+- مش بنقدر نعدل على function definition: الfunction في library مينفعش نغيرها. يمكن غيرك بيستخدمها ومش بيشاركك نفس الفكره عن الerror handeling الكويس. يمكن تبع حد تاني ومفيش source code. أو موجوده في library بتتحدث دايمًا، ولو غيرتها، هتضطر تعيد التعديل في كل version جديد.
+- الfunction مش عارفه تعمل إيه لما يحصل error: ده غالبًا بيحصل في library functions. اللي عامل الfunction يقدر يكتشف الerror، بس إنت (اللي بتنده) اللي تعرف تعمل إيه وقت الerror.
+- الfunction مش عارفه اتندهتلها منين: لما error يحصل، هتجيلك message بتقول فيه حاجه غلط، بس مش هتقولك إزاي البرنامج وصل للنقطه دي. أوقات، بتبقى عايز message أوضح.
+- الperformance: في function صغيره، الcheck ممكن يكون بيستهلك performance من الحساب نفسه. زي ()area، الcheck بيضاعف عدد instructions اللي بتتنفذ. وده ممكن يكون critical في برامج معينه، خصوصًا لو نفس المعلومه بتتراجع كتير في calls متداخله.
+
+طيب تعمل إيه؟ اعمل check على الarguments جوا function، إلا لو عندك سبب مقنع يمنعك.
+
+** ازاي نreport الerror؟
+بفرض اننا مش عايزين نستخدم ~throw runtime_error~ علشان مش عايزين البرنامج يقفل بمجرد اننا دخلنا arguments غلط علي الfunction، وعايزين مثلا الfunction ترجع قيمه معينه نقدر بعد كدا نتcheck عليها وناخد الaction بنائا عليها، نعمل ايه؟
+
+بص مثلا الfunction دي في ex14 في المحاضره اللي فاتت:
+
+#+begin_src C
+int find_score(std::vector<std::string> names, std::vector<int> scores, std::string name) {
+    for (int i = 0; i < names.size(); i++) {
+        if (names[i] == name) return scores[i];
+    }
+    return -1;
+}
+#+end_src
+
+هتلاقي اننا لو لقينا score بنرجعه، لو ملقيناش بنرجع -1، وبعد كدا في الmain واحنا بنستخدم الfunction:
+
+#+begin_src C
+while (std::cin >> search_name) {
+    int found_score = find_score(names, scores, search_name);
+    if (found_score == -1) {
+        std::cerr << "can't find name " << search_name << '\n';
+    } else {
+        std::cout << "the name " << search_name << " has the score of " << found_score << '\n';
+    }
+}
+#+end_src
+
+هتلاقينا بنتشيك لو كان الscore ب 1- ولو اه بنقوله ان مفيش score للاسم دا، انما لو اي حاجه تانيه يبقي الfunction رجعت score معين فبطبعه للuser.
+
+وبكدا نبقي قدرنا اننا نخلي الfunction هي اللي تعمل الchecking ونسيب اللي بينادي علي الfunction هو يهندل الerror زي ما هو عايز.
+
+الطريقه دي قد تبدو انها كويسه بس فيها كذا مشكله:
+- دلوقتي بقا الcalle والcaller الاتنين بيعملوا checking للerror.
+- ممكن الcaller ينسي يعمل الtest، وده هيخلي الfunction ترجع قيم غريبه في دلاله علي error ونبص نلاقينا بنستخدمها علي اساس انها الoutput الفعلي بتاع الfunction
+- معظم الfunctions مش هيبقي ليها extra return values نقدر نستخدمها علشان نعبر عن error.
+  علي سبيل المثال ممكن تعمل function بترجع integer، بس علي عكس ()area، ممكن ترجع اي integer، ومش هيبقي عندنا
+  رفاهيه اننا نحجز ال 1- علشان نrepresent بيه error لأنه ممكن يكون قيمه ممكن ترجع فعلا
+
+
+الحل علشان نحل المشكله دي هو اننا نستخدم الexceptions
+
+* الexceptions
+زي أغلب لغات البرمجة الحديثه، ++C بتوفر طريقه للتعامل مع الerrors وهي الexceptions. الفكره الأساسيه إنها تفصل بين اكتشاف الerror (اللي المفروض الcallee بيعمله) وبين التعامل مع الerror (اللي المفروض الcaller بيعمله)، وتضمن إن الerror اللي تم اكتشافها ميتمش تجاهلها. بمعني ان الexceptions بتخلينا نقدر نجمع أفضل ما في الطرق المختلفه للتعامل مع الerrors اللي اتكلمنا عنها. مفيش حاجه هتخلي التعامل مع الerrors سهل، بس exceptions بتخليه أسهل.
+
+الفكره بسيطه: لو function لقت error مش عارفه تتصرف فيه ومش متوقعه اللي ندهها يعرف، متعملش return عادي؛ بدل كده، ترمي exception بيقول إيه اللي حصل. أي حد ندهها (مباشر أو غير مباشر) يقدر يمسك الexception ده، يعني يحدد يتصرف إزاي لو حصل throw. الfunction اللي مهتمه بexceptions بتحط try-block وcatch بتحدد أنواع الexceptions اللي عايزه تمسكها. لو مفيش حد مسك الexception، البرنامج بيقف.
+
+هنرجع تاني للexceptions بعدين علشان نعرف نستخدمها بشكل أعمق. دلوقتي، بس استخدمها عشان تبلغ عن errors مش هتعرف تعالجها محليا. يعني، استخدم exceptions في errors تعتبر "exceptional". ده مش معناه أي مشكله function مش قادره تتعامل معاها. مثال، لما نحاول نفتح file، مش حاجه exceptional إن الfile مش موجود أو مش usable بالطريقه اللي طلبناها. ف الfunction اللي بتحاول تفتح لازم تبقى مستعده تتعامل مع الخطأ ده.
+
+تعالي نبص علي الfunction بتاعتنا area لو استخدمنا فيها الexceptions:
+
+#+begin_src C
+#include <iostream>
+#include <stdexcept>
+
+int area(int length, int width) {
+    if (length <= 0 || width <= 0)
+        throw std::invalid_argument("non positve area() argument");
+    return length * width;
+}
+
+int main() {
+    int x = 0, y = 0;
+    while (std::cout << "> " && std::cin >> x >> y) {
+        try {
+            std::cout << area(x, y) << '\n';
+        } catch (std::invalid_argument& e) {
+            std::cerr << "error: " << e.what() << '\n';
+        }
+    }
+}
+#+end_src
+
+باختصار شديد احنا هنا بنقول في الdefinition بتاع area ان لو الarguments تمام، اعمل return للoutput بتاع الfunction عادي، لو لأ اخرج من الfunction عن طريق انك تthrow او ترمي invalid_argument، ودا متعرف عندنا في الstandard library، علي امل ان حد بعد كدا "هيمسك" او هيcatch الexception دا ويتعامل معاه.
+
+بعد كدا في الmain واحنا بنستخدم الfunction بنحطها جوا try-block، ولو حصل اي exception بنعمله catch، وفي الحاله دي احنا بنcatch الinvalid_argument تحديدا وبنديله اسم وهو e، وبنطبع error وبنقوله ":error" وبعد كدا بنطبع ال ~()e.what~ ودي الerror message اللي بيتعملها throw مع الexception من الcallee.
