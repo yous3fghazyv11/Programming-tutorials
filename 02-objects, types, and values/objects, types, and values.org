@@ -1,4 +1,4 @@
-#+TITLE: Objects, Types and values in C
+#+TITLE: Objects, Types and values in C++
 #+AUTHOR: Yousef Ghazy
 #+DESCRIPTION: Objects, types and values
 #+OPTIONS: toc:2
@@ -29,7 +29,7 @@
 
 الobject هو مكان في الmemory عندك محجوز علشان يتحط فيه نوع معين من البيانات، ولما بندي للobject دا اسم بيتقال عليه variable. علي سبيل المثال ال character strings بتتحط في string variable، وال integers بتتحط في int variable، تقدر تتخيل الvariable دا صندوق في الmemory عندك ليه اسم وحجم ونوع معين نقدر نحط فيه داتا من نفس نوع الصندوق، خلينا ناخد مثال:
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 
 int main() {
@@ -43,7 +43,7 @@ int main() {
 
 ال =include#= وال =main= احنا كدا كدا بالفعل عرفناهم من المحاضرات اللي فاتت، وبما اننا كدا كدا هنحتاج نعمل =<include <iostream#= في تقريبا كل البرامج في خلال الكام محاضره الجايين، فحنا معدناش هنكتبها افتراضا بأنك كدا كدا عارف انها اساسيه، وبرضو احنا ساعات كتير هنكتب كود مش هيشتغل غير لو حطيته جوا ال main زي مثلا:
 
-#+begin_src C
+#+begin_src C++
 std::cout << "hello\n";
 #+end_src
 
@@ -51,23 +51,23 @@ std::cout << "hello\n";
 
 اول سطر عندنا في ال main بيطبع رساله " <Please type your age:\n" ودي بيتقال عليها prompt وبيبقي شكلها كدا:
 
-[[../../images/prompt.png]]
+[[../images/prompt.png]]
 
 وزي ما انت شايف بيقولك تعمل ايه، بعدها ينزل سطر ويكتب " <" وبعدها يسيبك تدخل input
 
 السطر اللي بعده:
 
-#+begin_src C
+#+begin_src C++
 int age;
 #+end_src
 
 دا *بيعرف* variable من النوع int اسمه age، بمعني انه بيحجز مكان في ال memory عندك (object) وبيديله اسم (age) وبيخليه جاهز انه يتخزن فيه قيم من نوع int (ارقام صحيحه)
 
-[[../../images/empty_int_variable.png]]
+[[../images/empty_int_variable.png]]
 
 السطر اللي بعده هتلاحظ انه شبه السطر اللي بيطبع بس مع بعض الاخلافات:
 
-#+begin_src C
+#+begin_src C++
 std::cin >> age;
 #+end_src
 
@@ -77,11 +77,11 @@ std::cin >> age;
 
 وبعد تنفيذ السطر دا، بفرض مثلا اننا دخلناله 20 ك input، المنظر هيبقي كدا:
 
-[[../../images/int_variable_not_empty.png]]
+[[../images/int_variable_not_empty.png]]
 
 السطر بقا اللي بعده:
 
-#+begin_src C
+#+begin_src C++
 std::cout << "your age is " << age << '\n';
 #+end_src
 
@@ -89,7 +89,7 @@ std::cout << "your age is " << age << '\n';
 
 لو كنا بنحب التكرار والكتابه الكتير كان ممكن نعمله بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 std::cout << "your age is ";
 std::cout << age;
 std::cout << '\n';
@@ -103,13 +103,13 @@ std::cout << '\n';
 
 فأحنا مثلا لو نفذنا البرنامج دا هيحصل المنظر الأتي:
 
-[[../../images/execution_of_get_age_program.png]]
+[[../images/execution_of_get_age_program.png]]
 
 هتلاحظ اننا بنشغل البرنامج، بيديلنا ال prompt الحلوه بتاعتنا، بنكتب 20 وبنضغط enter واللي ساعات بيتقال عليها return، وبيقولي your age is 20.
 
 خلينا نبص بصه علي برنامج تاني برضو بيعمل حاجه مشابهه:
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 #include <string>
 
@@ -122,9 +122,9 @@ int main() {
 }
 #+end_src
 
-اول حاجه هتلاحظ اننا علشان نقدر نتعامل مع ال strings هنحتاج نستخدم المكتبه او ال header file اللي اسمه string ودا برضو header تبع ال C standard library وبرضو علشان نستخدم ال strings جوا الكود لازم نحط قبلهم =::std= غير كدا البرنامج تقريبا زيه زي اللي فات بظبط، وتنفيذه هيبقي عامل كدا:
+اول حاجه هتلاحظ اننا علشان نقدر نتعامل مع ال strings هنحتاج نستخدم المكتبه او ال header file اللي اسمه string ودا برضو header تبع ال C++ standard library وبرضو علشان نستخدم ال strings جوا الكود لازم نحط قبلهم =::std= غير كدا البرنامج تقريبا زيه زي اللي فات بظبط، وتنفيذه هيبقي عامل كدا:
 
-[[../../images/execution_of_get_name.png]]
+[[../images/execution_of_get_name.png]]
 
 * الvariables
 ببساطة، ما نقدرش نعمل أي حاجة مفيدة على الكمبيوتر من غير ما نخزن بيانات في الmemory، زي ما عملنا مع الinput statement في المثال اللي فوق. "الأماكن" اللي بنخزن فيها البيانات دي بنسميها كائنات (objects).
@@ -135,7 +135,7 @@ int main() {
 
 الجملة اللي بتعرّف variable جديد اسمها (مش مفاجأة) تعريف (definition)، وغالبًا (ومن الأفضل) يكون فيها قيمة ابتدائية (initial value). مثلا:
 
-#+begin_src C
+#+begin_src C++
 std::string name = "yousef";
 int number_of_steps = 33;
 #+end_src
@@ -144,11 +144,11 @@ int number_of_steps = 33;
 
 تقدر تتخيل الvariables دي كobjects في ال memory بالشكل دا:
 
-[[../../images/objects_in_memory.png]]
+[[../images/objects_in_memory.png]]
 
 ولاحظ اننا مينفعش نحط نوع غلط من البيانات جوا variable، لازم نحط الdata بشكل يكون according to the variable type، مثلا:
 
-#+begin_src C
+#+begin_src C++
 int age = "yousef";	    // error: "yousef" is not an integer
 std::string name = 20;  // error: 20 is not a string
 #+end_src
@@ -157,7 +157,7 @@ std::string name = 20;  // error: 20 is not a string
 
 عندنا في ال ++C في عدد كبير جدا من الprimitive types بتيجي مع اللغه، بس في الأول كدا خلينا نعرفك علي 5 بس منهم:
 
-#+begin_src C
+#+begin_src C++
 int number_of_steps = 33;     // int for integer numbers
 double flying_time = 3.5;     // double for floating-point numbers
 char decimal_point = '.';     // char for individual characters
@@ -169,7 +169,7 @@ bool tap_on = true;           // bool for logical variables
 
 ولاحظ ان كل نوع من دول ليه الستايل المميز بتاعه في طريقه كتابته واللي بيتقال عليه literal:
 
-#+begin_src C
+#+begin_src C++
 33        // int: an integer
 3.5       // double: a floating-point number
 '.'       // char: an individual character enclosed in single quotes
@@ -182,7 +182,7 @@ true      // bool: either true or false
 * الinput مع الtypes
 عمليه انك تاخد input باستخدام ال get from operator او =<<= بتبقي حساسه للtype بتاع القيمه اللي داخله ونوع الvariable اللي انت بتدخل فيه، وبتقرأ بنائا علي الtype بتاعهم، بص كدا المثال دا مثلا:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     // read name and age
     std::cout << "Please enter your first name and age\n> ";
@@ -197,7 +197,7 @@ int main() {
 
 تعالي نجرب نلعب شويه مع البرنامج دا ونشوف هيتصرف ازاي في حالات مختلفه:
 
-[[../../images/test_name_age.png]]
+[[../images/test_name_age.png]]
 
 زي ما انت شايف اول مره شغلناه، لما بنكتب "yousef 20" الopeartor =<<= بيقرأ "yousef" في =first_name= بعد كدا 20 في =age= ، طب ليه ميقرأش "yousef 20" كلها في =first_name= ؟ علشان قرائه الstrings بتنتهي بال whitespace، اللي هي الspace أو newline أو tab، انما غير كدا الwhitespaces في الطبيعي بيتم تجاهلها من قبل =<<= .
 
@@ -207,7 +207,7 @@ int main() {
 
 زي ما انت شفت، عمليه القرائه للstrings بتنتهي بالwhitespace بمعني انه مش هيعرف يقرأ غير كلمه واحده، بس افرض احنا عايزين نقرأ اكتر من كلمه؟ في طرق كتير تقدر تعمل بيها كدا، مثلا ممكن نقرأ اسم من كلمتين بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     std::cout << "Please enter your first and second names\n> ";
     std::string first;
@@ -221,7 +221,7 @@ int main() {
 
 لاحظ ان مفيش initializer للtwo variables بتوعنا =first= و =second= مع اننا قلنا ان المفروض دايما نحط initializers، وده لأن by default الstrings بيتعملها initialization ل empty string، بمعني ان:
 
-#+begin_src C
+#+begin_src C++
 std::string first;	      // initialized to "" or empty string
 std::string second = "";  // initialized to "" or empty string
 // so basically both are the same
@@ -235,7 +235,7 @@ std::string second = "";  // initialized to "" or empty string
 * العمليات والOperators
 بالأضافه للقيم اللي ينفع نحطها في الvariable، نوع الvariable ايضا بيحدد العمليات اللي نقدر نعملها عليه ومعناها ايه، علي سبيل المثال:
 
-#+begin_src C
+#+begin_src C++
 int age = -1;
 std::cin >> age;                  // >> reads an integer into age
 std::string name;
@@ -250,8 +250,8 @@ std::string n3 = name - " Jr. ";  // error: - isn’t defined for strings
 
 دي مثلا بعض الoperators لبعض الأنواع المشهوره:
 
-[[../../images/operators1.png]]
-[[../../images/operators2.png]]
+[[../images/operators1.png]]
+[[../images/operators2.png]]
 
 لو مكان الoperation فاضي دا معناه ان الtype مش بيsupport الoperation دي بشكل مباشر.
 
@@ -259,7 +259,7 @@ std::string n3 = name - " Jr. ";  // error: - isn’t defined for strings
 
 تعالي مثلا نشوف بعض ال operations اللي ممكن تتعمل علي الfloating-point numbers من النوع double:
 
-#+begin_src C
+#+begin_src C++
 #include <cmath>
 
 int main() {
@@ -280,7 +280,7 @@ int main() {
 
 طبعًا، العمليات الحسابية العادية ليها نفس الشكل والمعنى اللي اتعلمناه في المدرسة. الاستثناء الوحيد هو إن علامة المساواة بتكون ~==~ مش ~=~ ، لأن ~=~ في البرمجة معناها "assignment" او انك تعين قيمه للمتغير او الvariable مش مقارنة. يعني بنستخدمها عشان نحط قيمة في متغير.
 
-طبيعي برضو إن مش كل حاجة ممكن نعملها على الأرقام (زي الجذر التربيعي مثلًا) تكون متاحة كـ"عملية مباشرة" باستخدام operator. عشان كده في عمليات اوoperations بنستخدم فيها functions ليها أسماء. في الحالة دي، لو عايزين نجيب الجذر التربيعي لعدد n، بنستخدم function اسمها sqrt من ال C standard library، علشان كدا اضطرينا نعمل include لheader file اسمه =cmath= وكتبنا قبلها =::std= ، وبنكتبها كده: =sqrt(n)= ، ودي طريقة معروفة في الرياضيات.
+طبيعي برضو إن مش كل حاجة ممكن نعملها على الأرقام (زي الجذر التربيعي مثلًا) تكون متاحة كـ"عملية مباشرة" باستخدام operator. عشان كده في عمليات اوoperations بنستخدم فيها functions ليها أسماء. في الحالة دي، لو عايزين نجيب الجذر التربيعي لعدد n، بنستخدم function اسمها sqrt من ال C++ standard library، علشان كدا اضطرينا نعمل include لheader file اسمه =cmath= وكتبنا قبلها =::std= ، وبنكتبها كده: =sqrt(n)= ، ودي طريقة معروفة في الرياضيات.
 
 -----------
 *جرب دي*
@@ -293,7 +293,7 @@ int main() {
 
 ال strings ليهم عدد اقل من ال operations بس زي ما هنشوف بعد كدا ان ليهم كتير من ال operations علي شكل functions. بس الoperations اللي بتتعمل عليهم باستخدام operator بتبقي نوعا ما سهله ومنطقيه، زي كدا مثلا:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     // read first and second name
     std::cout << "Please enter your first and second names\n";
@@ -310,13 +310,13 @@ int main() {
 * الassignment والinitialization
 واحد من اهم الoperators واكثرهم اثاره للأهتمام هو ال assignment operator ~=~ واللي بيعمله انه بيحط قيمه جديده في الvariable
 
-[[../../images/assignment_ints.png]]
+[[../images/assignment_ints.png]]
 
 ركز علي اخر assignment. أولا، واضح جدا ان هنا علامه ال ~=~ تساوي بمعني المقارنه المتعارف عليه، لأن =a = a + 7= دي مستحيله رياضيا، هنا علامه ~=~ معناها اننا عايزين نحط قيمه جديده في =a= والقيمه دي هتساوي =a + 7= و =a= المفروض انها كانت ب =4= و 4 + 7 ب 11، فأكننا بنقوله اننا عايزين نغير قيمه =a= ل 11.
 
 ونقدر برضو نعمل نفس الحوار بال strings:
 
-[[../../images/assignment_strings.png]]
+[[../images/assignment_strings.png]]
 
 لاحظ اننا بنستخدم المصطلحين starts out with و gets علشان نفرق بين عمليتين متشابهين نوعا ما بس منطقيا مختلفين:
 
@@ -334,7 +334,7 @@ int main() {
 ** مثال: detect repeated words
 لو تلاحظ هتلاقي الassignment بتبقي مفيده اكتر حاجه لما نبقي عايزين نغير قيمه نفس الvariable كذا مره، تعالي مثلا نبص علي البرنامج دا اللي بيdetect الكلمات المتكرره:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     std::string previous;
     std::string current;
@@ -349,14 +349,14 @@ int main() {
 
 تعالي نبص علي البرنامج دا سطر سطر ونحاول نفهم هو بيعمل ايه.
 
-#+begin_src C
+#+begin_src C++
 std::string previous;
 std::string current;
 #+end_src
 
 اول حاجه هتلاحظ اننا زي ما قلنا مفيش initializer للstrings علشان هما by default بيتعملهم default initialization لempty string او ""
 
-#+begin_src C
+#+begin_src C++
 while (std::cin >> current) {
     // statements here
 }
@@ -372,7 +372,7 @@ while (std::cin >> current) {
 على Windows، ده بيكون بالضغط على Ctrl+Z وبعدها Enter.
 أما على Linux، فبيكون بالضغط على Ctrl+D.
 
-#+begin_src C
+#+begin_src C++
 if (current == previous) {
     std::cout << "word: " << current << " repeated\n";
 }
@@ -380,7 +380,7 @@ if (current == previous) {
 
 هنا احنا بختصار بنقارن القيمه بتاعه =current= واللي هي الكلمه اللي اليوزر لسه مدخلها، بالقيمه بتاعه =previous= واللي هي اخر كلمه اليوزر دخلها، ولو هم نفس الكلمه، بنطبع دا
 
-#+begin_src C
+#+begin_src C++
 previous = current;
 #+end_src
 
@@ -423,7 +423,7 @@ jumped.
 ** الcomposite assignment
 في البرمجه، انك تغير قيمه الvariable بنائا علي قيمته القديمه زي مثلا: ~a = a + 7~ دي حاجه بتحصل كتير جدا، وال ++C بتديك syntax خاص علشان تعمل كدا:
 
-#+begin_src C
+#+begin_src C++
 a += 7;  // means a = a + 7
 b -= 9;  // means b = b - 9
 c *= 2; // means c = c * 2
@@ -440,7 +440,7 @@ c *= 2; // means c = c * 2
 ** مثال repeated words بعد التحسين
 في مثال ال repeated words اللي فوق احنا ممكن نضيف تعديل بسيط يخلينا نعرف الكلمه رقم كام بظبط اللي اتكررت باستخدام ال composite assignment:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     int number_of_words = 0;
     std::string previous;  // previous word; initialized to ""
@@ -484,13 +484,13 @@ Start menu      // space is not a letter, digit, or underscore
 
 في مجموعه من الnames في ال++C بيتقال عليها keywords، ودي بتبقي names اللغه بتستخدمها زي مثلا if, while, int, double وهكذا، لو جربت تستخدمهم هيطلعلك error:
 
-#+begin_src C
+#+begin_src C++
 int if = 7;  // error: if is a keyword
 #+end_src
 
 بس تقدر تستخدم الnames بتاعه الحاجات اللي في الstandard library عادي، زي كدا مثلا:
 
-#+begin_src C
+#+begin_src C++
 int string = 5;     // compiles, but will lead to trouble
 double cout = 2.4;  // compiles, but will lead to trouble
 #+end_src
@@ -547,7 +547,7 @@ remaining_free_slots_in_symbol_tab
 
 ممكن نتخيّل ده كده بشكل مرسوم بالطريقه دي:
 
-[[../../images/variables_as_containers.png]]
+[[../images/variables_as_containers.png]]
 
 زي ما انت شايف الـstring بيكون تمثيله في الmemory أعقد شوية من مثلا الـint، علشان الـstring بيحتفظ بعدد الحروف اللي جواه.
 
@@ -568,7 +568,7 @@ remaining_free_slots_in_symbol_tab
 
 نقدر نعرف الcompiler مخصص مساحه قد ايه بظبط لكل variable احنا بنستخدمه بنائا علي نوع الvariable باستخدام الsizeof operator:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     int age = 20;
     double pi = 3.14;
@@ -597,7 +597,7 @@ int main() {
 
 ممكن نرسم ده بشكل مرئي باستخدام 1 و0 علشان نوضح شكل الـbits في الميموري.
 
-[[../../images/word_in_memory.png]]
+[[../images/word_in_memory.png]]
 
 المنظر اللي قدامك دا ممكن يتفسر بطريقتين، ممكن يتفسر علي انه int وقيمته 120، وممكن يتفسر علي انه char وقيمته 'x' (لو بصينا حصرا علي اخر byte او 8 bits علي اليمين)، مش هيحدد احنا هنقرأه ازاي غير الtype بتاع الobject.
 
@@ -606,13 +606,13 @@ int main() {
 
 انت ممكن تسأل نفسك، هو انا اقدر اصلا اعمل كدا؟ المفروض ان كل type بيحدد العمليات اللي ينفع تتعمل عليه، ولو جربت استخدم object من type معين بطريقه بتخالف قوانين الtype زي مثلا اني احط 1.2 في variable من نوع int او اني اطرح strings من بعض ~s1 - s2~ هيطلعلي ايرور، او اني مثلا احاول اجمع int مع string.
 
-الـ"Type safety" الكامل هو الهدف والقانون العام في اللغة. بس للأسف، الـC compiler لوحده ميقدرش يضمن "type safety" بشكل كامل لكل كود ممكن تكتبه، علشان كده لازم نبعد عن الأساليب اللي مش آمنة. يعني لازم نلتزم بشوية قواعد كتابة كود (coding rules) علشان نقدر نحقق "type safety". دلوقتي، مع استخدام C الحديث (modern C) وأدوات الanalysis الحديثة، بقى ممكن نتأكد من الtype safety في أغلب استخدامات ++C.
+الـ"Type safety" الكامل هو الهدف والقانون العام في اللغة. بس للأسف، الـC++ compiler لوحده ميقدرش يضمن "type safety" بشكل كامل لكل كود ممكن تكتبه، علشان كده لازم نبعد عن الأساليب اللي مش آمنة. يعني لازم نلتزم بشوية قواعد كتابة كود (coding rules) علشان نقدر نحقق "type safety". دلوقتي، الfeatures الحديثه في ال++C وأدوات الanalysis الحديثة، بقى ممكن نتأكد من الtype safety في أغلب استخدامات ++C.
 
-الهدف الأساسي هو إننا ما نستخدمش أي ميزة من مميزات اللغة إلا لو نقدر نثبت إنها آمنة من ناحية الـtypes قبل ما البرنامج يشتغل، وده اللي بنسميه "static type safety". وباستثناء شوية أكواد موجودة في الكتاب علشان تشرح حاجات unsafe فكل الكود اللي في الكتاب بيطبق قواعد "C Core Guidelines" [CG] واتراجع علشان يكون آمن من ناحية الـtypes.
+الهدف الأساسي هو إننا ما نستخدمش أي ميزة من مميزات اللغة إلا لو نقدر نثبت إنها آمنة من ناحية الـtypes قبل ما البرنامج يشتغل، وده اللي بنسميه "static type safety". وباستثناء شوية أكواد موجودة في الكتاب علشان تشرح حاجات unsafe فكل الكود اللي في الكتاب بيطبق قواعد "C++ Core Guidelines" [CG] واتراجع علشان يكون آمن من ناحية الـtypes.
 
 فكره الtype safety مهمه جدا لو عايز تبقي مبرمج محترف، علشان كدا احنا بنتكلم عنها بدري اوي كدا في الكورس، لو محترمتش الtype safety هتلاقي عندك مشاكل كتير غامضه في الكود هيبقي صعب انك تتبع مصدرها ومش هتطلعلك error واضح صريح يقولك المشكله فين بظبط، علي سبيل المثال شوف الكود دا:
 
-#+begin_src C
+#+begin_src C++
 int x;		// we forgot to initialize x, x's value is undefined
 int y = x;          // y is initialized to a copy of x's value, which is undefined
 double z = 20 + x;  // here both the value of x and the meaning of the operation + are undefined
@@ -625,7 +625,7 @@ std::cout << "y: " << y << ", z: " << z << '\n';
 
 انا مثلا لما جربت اشغله طلعلي الoutput دا:
 
-[[../../images/type_safety.png]]
+[[../images/type_safety.png]]
 
 غالبا دا مكانش الoutput اللي انت كنت متوقع الكود يعمله، ودا مش بسبب قله معرفتك، حتي المبرمجين المحترفين مش هيكتبوا كود زي دا لأنهم مش هيبقوا قادرين يتنبؤا بالتصرف اللي هيعمله، علشان كدا بيتقال عليه undefined، بمعني ان التصرف بتاعه شيئ غير معرف.
 
@@ -634,7 +634,7 @@ std::cout << "y: " << y << ", z: " << z << '\n';
 * الconversions
 نقدر نحول من نوع لنوع تاني في عمليه تسمي بالimplicit casting بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 char c = 'x';
 int i1 = c;           // i1 gets the integer value of c (120)
 int i2 = c + 1000;    // i2 gets the integer value of c added to 1000 (1120)
@@ -660,7 +660,7 @@ double d = i2 + 7.3;  // d gets the floating-point value of i2 plus 7.3 (1127.3)
 
 زي ما شفنا في المثال بتاعه ال sizeof، الint بياخد مساحه 4 bytes من الmemory، والchar بياخد 1 byte.
 
-[[../../images/int_char_size.png]]
+[[../images/int_char_size.png]]
 
 ال1 byte بتاع الchar دا يقدر يخزن قيم من اول 128- لحد 127 أو من 0 ل 255 علي حسب الimplementation، علي عكس ال4 bytes بتوع الint اللي ممكن يخزنوا من اول 2,147,483,648- لحد 2,147,483,647.
 
@@ -668,19 +668,19 @@ double d = i2 + 7.3;  // d gets the floating-point value of i2 plus 7.3 (1127.3)
 
 يعني مثلا لو جربت انك تحط 321 في variable من نوع char هيطلعلك output انت ممكن متتوقعوش، هيطلعلك حرف 'A'، بس ازاي؟ ال A في الascii table الnumeric representation بتاعها 65 مش 321!
 
-#+begin_src C
+#+begin_src C++
 int x = 321;
 char y = x;
 std::cout << "the value of y: " << y << '\n';
 #+end_src
 
-[[../../images/int_to_char.png]]
+[[../images/int_to_char.png]]
 
 بص هو الموضوع دا صعب شويه شرحه من غير ما ننزل لتفاصيل low level شويه، بس تقدر تتخيل ان لما بتحط رقم زي 321 في variable من نوع char، بيوصل ل255 وبعد كدا بيبدأ يعد من الأول، فمثلا 256 لو حطيتها في variable من نوع char هتقلب 0، و257 هتبقي 1 وهكذا، وتقدر تتنبأ بده باستخدام الmodule operator، مثلا 321 دي نقدر نشوف هتبقي بكام لو اتحطت في char بالمعادله دي ~c = (int % 255) - 1~ والواحد ده علشان هي بتبدأ تعد من الصفر، بدل الواحد، فمثلا لو بدلنا int دي ب321 هيطلعلك c ب 65 وده اللي بيخليه يطبعلك 'A'
 
 علشان كدا بيتقال عليها narrowing conversion لأن زي ما انت شايف علشان نقدر نحول من int لchar خليناها بدل 321 ل 65، وللأسف برضو زي ما انت شايف الcompiler بيعمل دا عادي، ليه دي مشكله؟ لأن في اوقات كتير احنا اصلا مش بنبقي واخدين بالنا ان في narrowing conversion بتحصل، علي سبيل المثال بص دي:
 
-#+begin_src C
+#+begin_src C++
 double x = 2.7;
 // lots of code....
 int y = x;  // y becomes 2
@@ -702,7 +702,7 @@ int y = x;  // y becomes 2
 
 ولأسباب تاريخية وعملية، ++C بتوفر 4 طرق لكتابة الـinitialization.
 
-#+begin_src C
+#+begin_src C++
 int x0 = 7.8;    // narrows, some compilers warn
 int x1 {7.8};    // error : {} doesn’t narrow
 int x2 = {7.8};  // error : ={} doesn’t narrow (the redundant = is allowed)
@@ -713,7 +713,7 @@ int x3 (7.8);    // narrows, some compilers warn
 إحنا بنستخدم ~=~ لما الinitialization يكون بسيط وبينسخ الinitializer او القيمه المبدئيه.
 وبنستخدم ~{}~ أو ~{} =~ لما الinitialization يبقي معقد شوية أو لما نحب الـcompiler يمنع الـnarrowing في وقت الcompile-time.
 
-#+begin_src C
+#+begin_src C++
 int x = 7;
 double d = 7.7;
 std::string s = "Hello, World\n";
@@ -747,9 +747,9 @@ std::pair p {"Hello",17}; // will explain this in future lectures
 15. What is the difference between ~=~ and ~==~?
 16. What is a definition?
 17. What is an initialization and how does it differ from an assignment?
-18. What is string concatenation and how do you make it work in C?
+18. What is string concatenation and how do you make it work in C++?
 19. What operators can you apply to an int?
-20. Which of the following are legal names in C? If a name is not legal, why not?
+20. Which of the following are legal names in C++? If a name is not legal, why not?
     + ~This_little_pig~
     + ~This_1_is fine~
     + ~2_For_1_special~
@@ -770,7 +770,7 @@ std::pair p {"Hello",17}; // will explain this in future lectures
 
 * exercises
 1. If you haven’t done so already, do the TRY THIS exercises from this lecture.
-2. Write a program in C that converts from miles to kilometers. Your program should have a reasonable prompt for the user to enter a number of miles. Hint: A mile is 1.609 kilometers.
+2. Write a program in C++ that converts from miles to kilometers. Your program should have a reasonable prompt for the user to enter a number of miles. Hint: A mile is 1.609 kilometers.
 3. Write a program that does’t do anything, but declares a number of variables with legal and illegal names (such as int double = 0;), so that you can see how the compiler reacts.
 4. Write a program that prompts the user to enter two integer values. Store these values in int variables named val1 and val2. Write your program to determine the smaller, larger, sum, difference, product, and ratio of these values and report them to the user.
 5. Modify the program above to ask the user to enter floating-point values and store them in double variables. Compare the outputs of the two programs for some inputs of your choice. Are the results the same? Should they be? What’s the difference?

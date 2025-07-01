@@ -1,6 +1,6 @@
 #+TITLE: Hello, World!
 #+AUTHOR: Yousef Ghazy
-#+DESCRIPTION: hello world in C
+#+DESCRIPTION: hello world in C++
 #+OPTIONS: toc:2
 
 انا عارف ان في حاجات كتير انا مريت عليها مرور الكرام ومشرحتش كل حاجه بالتفصيل، وكمان استخدمت بعض المصطلحات مشرحتش معناها، بس دا لمصلحتك، لو شرحت كل حاجه بالتفصيل الفيديو هيبقي 10 ساعات ومش هتفهم حاجه، وكذلك لو حاولت اني ابسطلك الموضوع او اشرحهولك "بالبلدي" واتجنب استخدم المصطلحات الصح انت هتتلخبط بعدين، لذلك معلش انت هتسمع مصطلحات مش هتبقي فاهم معناها كويس، في حاجات انت مش هتبقي فاهم كويس بتشتغل ازاي، بس علي مدار المحاضرات الجايه في حاجات كتير هتوضح اكتر من كدا متقلقش، اهم حاجه عندي من في المحاضره دي انك تاخد general overview، وبعد كدا هنبدأ نخش في الحاجات دي بتعمق اكتر بكتير
@@ -56,7 +56,7 @@
 علشان نعرف نوصف "الحاجات" دي بدقة للكمبيوتر، إحنا محتاجين لغة مُعرفة بدقة وليها قواعد نحوية واضحة (الإنجليزي عشوائي زيادة عن اللزوم للكلام ده)،
 وكمان محتاجين مفردات محددة للحاجات اللي عايزين الكمبيوتر يعملها.
 
-اللغة دي اسمها لغة برمجة (programming language)، وC هي واحدة من لغات البرمجة اللي اتصممت علشان تنفع في أنواع مختلفة من شغل البرمجة.
+اللغة دي اسمها لغة برمجة (programming language)، و++C هي واحدة من لغات البرمجة اللي اتصممت علشان تنفع في أنواع مختلفة من شغل البرمجة.
 
 ولما تلاقي كمبيوتر بيعمل مهمة معقدة من تعليمات بسيطة، فده معناه إن في حد علمه يعمل كده عن طريق إنه كتب له برنامج.
 
@@ -64,7 +64,7 @@
 * طباعه 'hello, world'
 دائما لما اول برنامج بنعمله في اي لغه برمجه جديده بيكون مجرد برنامج بسيط مهمته انه يطبع 'Hello, World' في ال standard output مثلا زي كدا
 
-[[../../images/hello_world_exec.png]]
+[[../images/hello_world_exec.png]]
 
 طبعا الكلام دا من جوا ال terminal والرموز =$ code/~= دي اسمها prompt ومعناها انه مستني مني input، فانا دخلتله =hello_world/.= علشان اقوله يعمل execute للبرنامج اللي اسمه hello_world، لو هتعمل دا من برا الترمينال فانت هيبقي عندك ملف اسمه hello_world هتعمل عليه double click هيفتحلك ال terminal وهيكتبلك جواها '!Hello, World'
 
@@ -72,7 +72,7 @@
 
 علشان نعمل برنامج زي كدا في ++C هنحتاج نكتب الكود دا:
 
-#+begin_src C
+#+begin_src C++
 // file hello_world.cpp
 // Simple program to print out "Hello, World!" in the standard output (terminal)
 #include <iostream>
@@ -87,20 +87,20 @@ int main() {
 ** ال comments
 خلينا نبدأ نشرح السطر دا
 
-#+begin_src C
+#+begin_src C++
 // Simple program to print out "Hello, World!" in the standard output (terminal)
 #+end_src
 
 السطر دا اسمه =comment= ، اي حاجه بتبدأ بعد علامه =//= او اتنين سلاش بتبقي comment، وال comments مش تعليمات بتتنفذ من قبل ال compiler، لاحظ انها اصلا مجرد كلام انجليزي عادي، هي مجرد كلام بنكتبه علشان المبرمج اللي بيقرأ الكود، واحنا هنا استخدمنا ال comments علشان نوضحلك البرنامج دا بيعمل ايه
 
-#+begin_src C
+#+begin_src C++
 std::cout << "Hello, World!\n"; // the line that actually produces the output
 #+end_src
 
 لاحظ برضو في السطر دا في comment بعد ال =//=
 واول حاجه عايزك تاخد بالك منها هي انك تقدر تكتب comments في نفس السطر اللي فيه الكود عادي بس لازم يكون في اخر السطر بعد لما خلصت الكود، لأن كل حاجه بعد ال =//= هتعتبر comment ولو عملت comment قبل ما الكود يخلص هتتفاجئ ان الكود بتاعك مش بيتقرأ ومش بيتنفذ، لحسن الحظ معظم ال IDEs وال Text Editors بيعملوا ال comments ب font معين يخلينا نقدر ناخد بالنا لو حاجه زي دي حصلت، بص مثلا المثال دا:
 
-#+begin_src C
+#+begin_src C++
 std::cout << // comment "Hello, World!\n";
 #+end_src
 
@@ -111,25 +111,25 @@ std::cout << // comment "Hello, World!\n";
 ** عمليه الطباعه وال standard iostream
 بغض النظر عن ال comments، خلينا نشوف السطر دا بتعمق اكتر
 
-#+begin_src C
+#+begin_src C++
 std::cout << "Hello, World!\n";
 #+end_src
 
 انا شيلت الكومنت علشان ميبقاش مصدر الهاء ونقدر نركز علي السطر نفسه
 
-اللي السطر دا بيعمله باختصار انه بينادي علي object اسمه =cout= واللي هو اختصار ل character output وده object متعرف في ال C standard library علشان كدا احتاجنا نسبقه ب =::std= وبيدخله ال string اللي اسمه "!Hello, World!\n" عن طريق ال operator =>>= واللي بيتقال عليه put to وهنا كلمه string معناها سلسله من الحروف او string of characters، وأي string هتدخله لل =cout= باستخدام ال put to operator او =>>= هيطبعها عندك في ال Terminal، فهو هيطبع "!Hello, World" لل standard output واللي هو ال terminal وبعد كدا بينزل سطر،
+اللي السطر دا بيعمله باختصار انه بينادي علي object اسمه =cout= واللي هو اختصار ل character output وده object متعرف في ال C++ standard library علشان كدا احتاجنا نسبقه ب =::std= وبيدخله ال string اللي اسمه "!Hello, World!\n" عن طريق ال operator =>>= واللي بيتقال عليه put to وهنا كلمه string معناها سلسله من الحروف او string of characters، وأي string هتدخله لل =cout= باستخدام ال put to operator او =>>= هيطبعها عندك في ال Terminal، فهو هيطبع "!Hello, World" لل standard output واللي هو ال terminal وبعد كدا بينزل سطر،
 
 يعني السطر دا بيتقرأ: =put "Hello, World\n" to the cout object=
 
 بمعني انه هيطبع الحروف: ='!' ,'H', 'e', 'l', 'l', 'o', ',', ' ', 'W', 'o', 'r', 'l', 'd'= وبعدها هيقوم طابع الحرف =n\= وده هيخليه ينزل سطر، منغير ال =n\= البرنامج هيعمل كدا:
 
-[[../../images/hello_world_no_newline.png]]
+[[../images/hello_world_no_newline.png]]
 
 طبعا احنا مش عايزين دا فهنحط ال =n\= بتاعتنا عادي
 
 ولاحظ ان =n\= دي حرف واحد، اسمها newline character ودي بتندرج تبع مجموعه من الحروف اللي اسمهم escape characters، وكلهم بيبدؤا ب =n\= واحنا لحد الان احنا مش محتاجين نعرف اي escape characters تانيه غير ال =n\= بس بعد كدا هنلاقي نفسنا محتاجين نستخدم كتير منهم غير ال =n\=
 
-ال =cout= دا object من ال ostream ومتعرف جوا ال namespace اللي اسمها std اللي متعرف فيها تقريبا كل حاجه في ال C standard library
+ال =cout= دا object من ال ostream ومتعرف جوا ال namespace اللي اسمها std اللي متعرف فيها تقريبا كل حاجه في ال C++ standard library
 
 ** الاستدعاء او include
 ال object بتاعنا اللي اسمه =cout= مهواش جاي مع ال core بتاع ال ++C،
@@ -172,7 +172,7 @@ print("Hello, World!")
 
 اول لما بتشغل البرنامج ال operating system بيخش يدور علي function اسمها main وبينفذ اللي فيها علي سبيل المثال دي كانت ال main بتاعه ال hello_world.cpp:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     std::cout << "Hello, World!\n";
     return 0;
@@ -187,11 +187,11 @@ int main() {
 
 علي سبيل المثال لو جربنا ننفذ الكود بتاع hello_world دا هيبقي شكله كدا:
 
-[[../../images/exit_0.png]]
+[[../images/exit_0.png]]
 
 لاحظ ان السهمين لونهم اخضر، بس لو غيرنا ال =;return 0= وخليناها =;return 1= مثلا بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     std::cout << "Hello, World!\n";
     return 1;
@@ -200,13 +200,13 @@ int main() {
 
 هتلاقي ان المنظر اتغير لما نيجي نشغل البرنامج:
 
-[[../../images/exit_1.png]]
+[[../images/exit_1.png]]
 
 هتلاقي ان البرنامج اشتغل زي الفل مفيش اي مشاكل بس مع ذلك ال shell بتاعي مخلي السهمين لونهم احمر علامه علي ان البرنامج مشتغلش كويس وعمل ايرور، مع انه اشتغل زي الفل بس علشان انت عملت =;return1=
 
 الصوره دي هتوضح الموضوع بشكل اوضح شويه:
 
-[[../../images/exit_codes_compare.png]]
+[[../images/exit_codes_compare.png]]
 
 زي ما انت شايف البرنامج الاول طبع المطلوب منه وخلص والأسهم خضرا، وال output بتاع الامر =?$ echo= طالع 0، وده امر بنستخدمه علشان نعرف لو كان البرنامج اشتغل كويس ولا عمل errors
 
@@ -233,12 +233,12 @@ hello_world.cpp
 
 وكمان، الكومبايلر مش بيتسامح خالص مع الغلطات الإملائية، يعني لو كتبت اسم غلط أو نسيت حرف في دالة، مش هيعديها.
 
-[[../../images/compilation.png]]
+[[../images/compilation.png]]
 
 ** الerrors
 تعالي نحاول نكتب شويه امثله كدا فيها شويه اخطاء او errors ونشوف الcompiler يقول عليها ايه.
 
-#+begin_src C
+#+begin_src C++
 int main() {
     std::cout << "Hello, World!\n";
     return 0;
@@ -247,7 +247,7 @@ int main() {
 
 احنا هنا مش بنستقطع ال main من البرنامج، لا ده هو البرنامج كامل، لاحظ ان مفيش =include#= لل iostream، وده هينتج عنه ان ال compiler هيقولك يسطا انا معرفش يعني ايه std::cout دي، فخلينا نصلح الغلطه دي ونحط ال =include#= تاني
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 
 int main() {
@@ -258,7 +258,7 @@ int main() {
 
 هنا احنا صلحنا الغلطه بتاعه ال =include#= بس عملنا غلطه تانيه، احنا نسينا نكتب =::std= قبل =cout= وده هيخلي ال compiler يزعل منك جامد
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 
 int main() {
@@ -269,7 +269,7 @@ int main() {
 
 هنا احنا نسينا نقفل ال string ب ="= 
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 
 integer main() {
@@ -280,7 +280,7 @@ integer main() {
 
 هنا احنا استخدمنا كلمه integer بدل int، ال compiler مش هيفهم دا
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 
 integer main() {
@@ -300,7 +300,7 @@ integer main() {
 
 ** عمليه الLinking
 البرنامج عادة بيتكوّن من كذا جزء منفصل، وساعات الأجزاء دي مش بتبقي مكتوبه كلها من نفس الشخص، بل ممكن اشخاص مختلفه تكتبها.
-مثلًا، برنامج "Hello, World!" بيتكوّن من الجزء اللي إحنا كتبناه، زائد أجزاء تانية من مكتبة ال C standard library.
+مثلًا، برنامج "Hello, World!" بيتكوّن من الجزء اللي إحنا كتبناه، زائد أجزاء تانية من مكتبة ال C++ standard library.
 
 الأجزاء المنفصلة دي (اللي أحيانًا بنسميها Modules أو Translation Units) لازم تتترجم كل واحدة لوحدها،
 وبعد كده تتربط ببعض علشان تكوّن برنامج قابل للتنفيذ (Executable Program).
@@ -311,7 +311,7 @@ integer main() {
 خد بالك إن الكود اللي طالع بعد الترجمة (Object Code) وكمان الملفات التنفيذية مش بتمشي على كل الأنظمة.
 يعني لو عملت compile لكود على جهاز Windows، هتاخد كود مخصوص للويندوز، ومش هيشتغل على جهاز Linux.
 
-[[../../images/linking.png]]
+[[../images/linking.png]]
 
 المكتبة (Library) ببساطة هي شوية كود – غالبًا مكتوبه من ناس تانية – وإحنا بنستخدمها عن طريق declarations موجودة في ملف إحنا بنستورد منه.
 

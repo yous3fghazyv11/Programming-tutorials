@@ -104,7 +104,7 @@
 + الAbstraction:
   بنخبي التفاصيل اللي مش محتاجين نعرفها علشان نستخدم حاجة (يعني "implementation details") ورا interface يكون بسيط وعام.
   مثال: بدل ما ندخل في تفاصيل عمليه الsorting دليل تليفونات (ودي تفاصيل ممكن تكتب عنها كتب)،
-  إحنا ببساطة بنستدعي sort algorithm من الC standard library.
+  إحنا ببساطة بنستدعي sort algorithm من الC++ standard library.
   كل اللي محتاجين نعرفه هو إزاي ننادي الfunction اللي اسمها =(b)std::sort= ، والـb هو دليل التليفونات.
   مثال تاني: إحنا مش بنتعامل مباشرة مع الmemory – لأنها فوضوية – بل بنستخدم typed variables، أو vectors، أو maps.
 + تكنيك Divide-and-conquer:
@@ -160,7 +160,7 @@
 
 علي سبيل المثال بص الكود دا:
 
-#+begin_src C
+#+begin_src C++
 int length = 20; // 20 is a literal integer (used to initialize a variable)
 int width = 40;
 int area = length∗width; // a multiplication
@@ -172,7 +172,7 @@ int area = length∗width; // a multiplication
 
 وأيضا مثلا:
 
-#+begin_src C
+#+begin_src C++
 length = 99; // assign 99 to length
 #+end_src
 
@@ -182,7 +182,7 @@ length = 99; // assign 99 to length
 
 الassignment تعتبر expression، ليه؟ علشان بتحسب قيمه من two operands + operator، الoperands هم الvariable والvalue اللي بنحطها فيه. والexpression دا بينتج قيمه الobject الجديده. مثلا:
 
-#+begin_src C
+#+begin_src C++
 int a = 3;
 int b = 5 + (a = 7);
 std::cout << b << ", " << a << '\n';
@@ -191,19 +191,19 @@ std::cout << b << ", " << a << '\n';
 
 نقدر نعمل expressions اكثر تعقيدا شويه باستخدام بعض الbinary operators اللي اتعودنا عليها زي + أو * وممكن لو احتاجنا نعملهم grouping باستخدام الاقواس:
 
-#+begin_src C
+#+begin_src C++
 int perimeter = (length + width) ∗ 2; // add then multiply
 #+end_src
 
 بدون الأقواس هنضطر نقول:
 
-#+begin_src C
+#+begin_src C++
 int perimeter = length * 2 + width * 2;
 #+end_src
 
 بمعني اننا هضرب كل واحد فيهم في اتنين الأول بعدها نعمل الجمع، دي basic arithmetic، بس لاحظ اننا كان ممكن نعمل الغلطه دي:
 
-#+begin_src C
+#+begin_src C++
 int perimeter = length + width * 2; // add width * 2 to length
 #+end_src
 
@@ -212,17 +212,17 @@ int perimeter = length + width * 2; // add width * 2 to length
 * الconstant expressions
 البرامج معظم الوقت بتستخدم ثوابت كتير، وهنا كلمه ثوابت معناها قيم ثابته مش بتتغير علي مدار البرنامج علي عكس المتغيرات، علي سبيل المثال، برنامج هندسي هتلاقيه بيستخدم pi او ثابت بيحول من mile لkilometer واللي غالبا هيبقي حاجه زي 1.609، طبعا احنا هنبقي عايزين اسامي للكلام دا، زي ما قلنا pi مقلناش 3.14159، كذلك مش هقعد كل شويه في الكود اكتب الأرقام دي، وبرضو زي ما انت شايف pi عمرها ما هتتغير، فاحنا عايزين طريقه نقدر بيها نعرف اسم جديد مثلا للبرنامج يبقي pi ويبقي فيه القيمه 3.14159 ومتتغيرش ابدا علي مدار البرنامج، علشان كدا ال++C فيها مفهوم الsymbolic constant وده باختصار named object متقدرش تغير قيمته بعد الinitialization، زي كدا مثلا:
 
-#+begin_src C
+#+begin_src C++
 constexpr double PI = 3.14159;
 PI = 7; // error : assignment to constant
 double c = 2 * PI * r; // OK: we just read pi; we don’t try to change it
 #+end_src
 
-هنا بيتقال علي PI دي symbolic constant، وزي ما انت شايف بنعرفاه بالkeyword بتاعتنا =constexpr= ولاحظ برضو ان PI هنا uppercase بمعني ان كل حروفها capital، دا مش ضروري علشان تعمل symbolic constant. بس دا style الC developers تبنوه علشان لما تشوف اسم في الكود كل حروفه كابيتال تعرف ان دا symbolic constant.
+هنا بيتقال علي PI دي symbolic constant، وزي ما انت شايف بنعرفاه بالkeyword بتاعتنا =constexpr= ولاحظ برضو ان PI هنا uppercase بمعني ان كل حروفها capital، دا مش ضروري علشان تعمل symbolic constant. بس دا style الC++ developers تبنوه علشان لما تشوف اسم في الكود كل حروفه كابيتال تعرف ان دا symbolic constant.
 
 الsymbolic constants دي مهمه جدا علشان تخلي الكود بتاعك readable، انت ممكن تكون خدت بالك ان 3.14159 دي تقريب ل pi، بس هل كنت هتعرف حاجه زي مثلا 299792458؟ وبرضو لو حد قالك اننا عايزين نغير الكود علشان يستخدم pi ب12 رقم بدل 6 بس، هل هتعدل الرقم في كل مكان عندك في الكود؟ اكيد هيبقي اسهل بكتير انك بس تعمل كدا:
 
-#+begin_src C
+#+begin_src C++
 constexpr double pi = 3.14159265359;
 #+end_src
 
@@ -232,7 +232,7 @@ constexpr double pi = 3.14159265359;
 
 ال =constexpr= لازم يتعرفله قيمه محدده وقت الcompile time، بمعني انك لو عندك =constexpr= في الكود بتاعك وجيت تcompile والcompiler مقدرش انه يحدد قيمته ايه وقت الcompilation هيطلعلك error:
 
-#+begin_src C
+#+begin_src C++
 constexpr int MAX = 100;
 int n;
 std::cin >> n; // value of n is only aquired at runtime
@@ -242,7 +242,7 @@ constexpr int C2 = n + 7; // error : we don’t know the value of n until runtim
 
 انما لو عندك حاله انت عايز تعمل فيها constant بيتعمله initialization بvalue مش هتبقي معروفه في الcompile time، ال++C بتقدملك مفهوم للconstants اسمه =const=:
 
-#+begin_src C
+#+begin_src C++
 int n;
 std::cin >> n;
 const int c3 = 3 + n; // this is ok
@@ -254,12 +254,12 @@ c3 = 7; // error: c3 is a constant an cannot be reassigned
 * الoperators
 إحنا لحد الان بنستخدم أبسط الـ operators. بس قريب هتحتاج تستخدم أكتر علشان تقدر تعبّر عن عمليات أعقد. أغلب الـ operators مشهورة ومعروفة، فهنشرحهم بعدين وقت ما تحتاجهم، وكمان تقدر تدور على التفاصيل بنفسك وقت ما تحتاجهم. دا جدول من الكتاب بكتير من الoperators الشائعه:
 
-[[../../images/operators3.png]]
-[[../../images/operators4.png]]
+[[../images/operators3.png]]
+[[../images/operators4.png]]
 
 لاحظ ان:
 
-#+begin_src C
+#+begin_src C++
 a > b > c;
 // is the same as
 (a > b) > c;
@@ -269,7 +269,7 @@ a > b > c;
 
 الزياده نقدر نعبر عنها ب 4 طرق:
 
-#+begin_src C
+#+begin_src C++
 int a = 3;  // a == 3
 ++a;        // a == 4
 a++;        // a == 4
@@ -279,7 +279,7 @@ a = a + 1;  // a == 7
 
 لاحظ ان تاني واحده مش بتزود قيمه a بشكل لحظي، هي بس بتقول ان قيمه a هتزيد، والزياده دي مش بتحصل غير لما تيجي تستخدم a بعد كدا، انما قيمه a في الexpression نفسه بتفضل زي ما هي، مثلا:
 
-#+begin_src C
+#+begin_src C++
 int a = 3;
 int b = 5 + a++; // b == 8 because a == 3
 std::cout << b << ", " << a << '\n'; // 8, 4
@@ -307,7 +307,7 @@ std::cout << b << ", " << a << '\n'; // 8, 4
 
 شوف المثال ده:
 
-#+begin_src C
+#+begin_src C++
 a = b
 ++c;
 #+end_src
@@ -316,13 +316,13 @@ a = b
 
 هل تقصد:
 
-#+begin_src C
+#+begin_src C++
 a = b; ++c;
 #+end_src
 
 ولا تقصد:
 
-#+begin_src C
+#+begin_src C++
 a = b++; c;
 #+end_src
 
@@ -342,7 +342,7 @@ a = b++; c;
 لما الstatements تكون ورا بعض، الكمبيوتر بينفذهم بالترتيب المكتوب.
 مثلاً:
 
-#+begin_src C
+#+begin_src C++
 int a = 7;
 std::cout << a << '\n';
 #+end_src
@@ -354,7 +354,7 @@ std::cout << a << '\n';
 الstatement اللي ما بتعملش حاجة غالباً بتكون logical errors.
 مثلاً:
 
-#+begin_src C
+#+begin_src C++
 1 + 2;  // do an addition but don't use the sum
 a * b;  // do a mutliplication but don't use the product
 #+end_src
@@ -369,7 +369,7 @@ a * b;  // do a mutliplication but don't use the product
 
 فيه كمان نوع من الstatements اسمه empty statements. شوف المثال:
 
-#+begin_src C
+#+begin_src C++
 if (x == 5);
     y = 3;
 #+end_src
@@ -391,7 +391,7 @@ if (x == 5);
 *** الif-statements
 ابسط شكل من اشكال الselection هي الif-statement، واللي بتعمل حاجه بنائا علي شرط معين، مثلا:
 
-#+begin_src C
+#+begin_src C++
 int a = 0;
 int b = 0;
 std::cout << "Please enter two integers\n";
@@ -410,16 +410,16 @@ else
 و
 "لو الإشارة حمرا، استنى"
 
-بالـ C نكتبها كده مثلًا:
+بالـ C++ نكتبها كده مثلًا:
 
-#+begin_src C
+#+begin_src C++
 if (traffic_light == green)
     go();
 #+end_src
 
 أو:
 
-#+begin_src C
+#+begin_src C++
 if (traffic_light == red)
     wait();
 #+end_src
@@ -427,7 +427,7 @@ if (traffic_light == red)
 الفكرة الأساسية سهلة، بس برضه سهل إنك تستخدم الـ if بشكل سطحي أو بسيط زيادة عن اللزوم.
 خد بالك من المثال الجاي وشوف إيه المشكلة فيه:
 
-#+begin_src C
+#+begin_src C++
 // convert from inches to centimeters or centimeters to inches
 // a suffix ’i’ or ’c’ indicates the unit of the input
 
@@ -469,7 +469,7 @@ else
 
 دي نسخه محسنه من البرنامج:
 
-#+begin_src C
+#+begin_src C++
 if (unit == 'i')
     std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
 else if (unit == 'c')
@@ -513,7 +513,7 @@ if (expression) {
 
 النوع دا من الselection مشهور اوي لردجه ان ++C عندها ليه statement خاصه اسمها الswitch-statement:
 
-#+begin_src C
+#+begin_src C++
 switch (unit) {
     case 'i':
         std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
@@ -555,7 +555,7 @@ switch (unit) {
 
 مثلا:
 
-#+begin_src C
+#+begin_src C++
 // you can switch only on integers, etc.:
 std::cout << "Do you like fish?\n";
 std::string s;
@@ -583,7 +583,7 @@ switch (s) {  // error : the value must be of integer, char, or enum type
 
 القيم في case لازم تكون مختلفة عن بعض، مينفعش تكرر نفس القيمة في أكتر من case. مثلا:
 
-#+begin_src C
+#+begin_src C++
 // case labels must be distinct and constants:
 int y = 'y';
 constexpr char n = 'n';
@@ -608,7 +608,7 @@ default:
 
 ساعات بنبقي عايزين نعمل نفس الشيئ لمجموعه من القيم في الswitch، في الحاله دي نقدر نعمل كدا:
 
-#+begin_src C
+#+begin_src C++
 // you can label a statement with several case labels:
 std::cout << "Please enter a digit\n";
 char a = 0;
@@ -628,7 +628,7 @@ switch (a) {
 
 أكتر خطأ شائع في الswitch-statement هو انك تنسي تنهي الcase بbreak-statemnt، مثلا:
 
-#+begin_src C
+#+begin_src C++
 switch (unit) {
     case 'i':
         std::cout << length << "in == " << length∗cm_per_inch << "cm\n";
@@ -648,7 +648,7 @@ switch (unit) {
 
 في الحالات النادره اللي بنبقي عايزين فيها اننا حتي لو لقينا match في case معينه وعايزين نكمل، وعايزين الcompiler واللي بيقرأ الكود يعرف اننا قاصدين نكمل وان دا مش bug، ممكن نستخدم حاجه اسمها fallthrough:
 
-#+begin_src C
+#+begin_src C++
 switch (check) {
     case checked:
         if (val<0)
@@ -682,7 +682,7 @@ switch (check) {
 
 زي ما انت شايف البرنامج بيطبع رقم وبعد كدا حرف تاب 't\' وبعد كدا مربع الرقم دا، البرنامج دا بال++C هيبقي شكله كدا:
 
-#+begin_src C
+#+begin_src C++
 int main() {
     // calculate and print a table of squares 0-99
     int i = 0; // star t from 0
@@ -714,7 +714,7 @@ int main() {
 
 الـlanguage construct اللي استخدمناه هنا اسمه while-statement. بعد الـkeyword المميزة ليه while، بيجي شرط وبعده الـbody:
 
-#+begin_src C
+#+begin_src C++
 while (i < 100) {
     std::cout << i << '\t' << square(i) << '\n';
     ++i; 
@@ -741,7 +741,7 @@ while (i < 100) {
 
 في الحالة دي، كتبنا:
 
-#+begin_src C
+#+begin_src C++
 int i = 0; // start from 0
 #+end_src
 
@@ -764,7 +764,7 @@ c    99
 
 لاحظ الطريقه اللي عملنا بيها grouping للtwo statements اللي الwhile بتعملهم execute:
 
-#+begin_src C
+#+begin_src C++
 while (i < 100) {
     std::cout << i << '\t' << square(i, 2) << '\n';
     ++i; 
@@ -778,7 +778,7 @@ while (i < 100) {
 الـfor-statement شبه الـwhile-statement، لكن التحكم في الـcontrol variable بيكون كله جوا الأقواس بتاعه الstatement في نفس السطر، فبيبقى سهل تشوفه وتفهمه.
 كنا ممكن نكتب "البرنامج الأول" بالشكل ده:
 
-#+begin_src C
+#+begin_src C++
 int main() {
 	for (int i = 0; i < 100; i++) {
 		std::cout << i << '\t' << square(i, 2) << '\n';
@@ -789,7 +789,7 @@ int main() {
 
 دايما الfor-statement بيبقي في while-statement بتعادلها، في الحاله دي مثلا، لو هنعمل اخر مثال دا بwhile-statement  بدل for هيبقي شكله كدا:
 
-#+begin_src C
+#+begin_src C++
 int i = 0;  // the for-statement initialize
 while (i < 100) {  // the for-statement condition
     std::cout << i << '\t' << square(i, 2) << '\n';
@@ -801,7 +801,7 @@ while (i < 100) {  // the for-statement condition
 
 اوعي تعدل الcontrol variable جوا الbody بتاع الfor-statement، دا هيبقي inconvenient جدا لأي حد بيقرأ الكود، علي سبيل المثال:
 
-#+begin_src C
+#+begin_src C++
 // bad code below
 for (int i = 0; i < 100; ++i) {  // for i in the [0:100) range
     std::cout << i << '\t' << square(i) << '\n';
@@ -811,7 +811,7 @@ for (int i = 0; i < 100; ++i) {  // for i in the [0:100) range
 
 لما تيجي تتبع الكود دا وتفهم اللي بيحصل فيه هتلاقي ان i بيحصلها increment مرتين علي مدار الloop، فاحنا هنبدأ ب i == 0 وبعد كدا في الiteration التانيه هتبقي ب 2 وهكذا، ودا هيؤدي لأننا هيطلعلنا الoutput متكون من 50 رقم بس بدل 100 وكلهم زوجيين، لو كانت دي نيتنا من الأول كان هيبقي افضل نعملها كدا:
 
-#+begin_src C
+#+begin_src C++
 // good code below
 for (int i = 0; i < 100; i += 2) {
     std::cout << i << '\t' << square(i) << '\n';
@@ -823,7 +823,7 @@ for (int i = 0; i < 100; i += 2) {
 * الfunctions
 ايه بقا حوار الfunction اللي اسمها square دي؟ دا اسمه function call، وبشكل ادق دا بيتقال عليه call to square مع ادخال i كargument. الfunction ما هي الا مجموعه من الstatements انت اديتلهم اسم، ممكن برضو ترجع قيمه بيتقال عليها return value. الstandard library فيها functions كتير مفيده جدا، زي مثلا ال ~()sqrt~ اللي استخدمناها المحاضره اللي فاتت، وفي functions كتير هنحتاج نكتبها بنفسنا، علي سبيل المثال ال square function بتاعتنا ممكن تتعمل بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 int square(int num) {
 	return num * num;
 }
@@ -835,7 +835,7 @@ int square(int num) {
 
 ممكن بعد كدا بقا نستخدم الfunction دي بأي شكل احنا عايزينه:
 
-#+begin_src C
+#+begin_src C++
 int x = square(2);  // x = 4
 std::cout << square(3) << " " << square(4); // prints 9 16
 int y = 5 + square(5);  // y == 30
@@ -844,7 +844,7 @@ std::string z = square(6) // error, square returns int not string
 
 بس لازم تديلها العدد والنوع الصح من الarguments، بص مثلا:
 
-#+begin_src C
+#+begin_src C++
 square(2);               // probably a mistake: unused return value
 int v1 = square();       // error : argument missing
 int v2 = square;         // error : parentheses missing
@@ -866,7 +866,7 @@ type-identifier function-identifier(parameter-list) {
 
 الparameter list ممكن تبقي فاضيه في حاله ان الfunction مش بتاخد input، وغالبا لو الfunction مش بتاخد input فهي برضو غالبا مش بتproduce output او بالأصح مش بتreturn حاجه، وفي الحاله دي ممكن نعمل الreturn type بتاعها void:
 
-#+begin_src C
+#+begin_src C++
 void say_sorry() {
 	std::cout << "I'm sorry uwu\n";
 }
@@ -899,7 +899,7 @@ int main() {
 
 لو كنا حابين اننا نبسط الloop في البرنامج بتاع الsquare اكتر شويه كان ممكن نعمل كدا:
 
-#+begin_src C
+#+begin_src C++
 void print_square(int x) {
 	std::cout << x << '\t' << x * x << '\n';
 }
@@ -933,7 +933,7 @@ int main() {
 ----------
 *جرب دا:* اعمل الbody بتاع الfunction دي:
 
-#+begin_src C
+#+begin_src C++
 double power(double base, double exponenet) {
 	// your code here
 }
@@ -945,7 +945,7 @@ double power(double base, double exponenet) {
 ** الfunction declaration
 لاحظت ان تقريبا كل المعلومات اللي انت محتاجها علشان تستخدم الfunction موجوده في اول سطر؟ يعني مثلا في المثال بتاع الfunction اللي اسمها power اللي انت لسه عاملها، مجرد ما نبص علي اول سطر فيها واللي هو ~double power(double base, double exponenet)~ هيبقي عندنا المعلومات الكافيه اننا نقول:
 
-#+begin_src C
+#+begin_src C++
 double four_squared = power(4,2);  // four_squared will be 16
 #+end_src
 
@@ -959,14 +959,14 @@ double four_squared = power(4,2);  // four_squared will be 16
 
 والكويس إن ++C بتوفر طريقة نقدر نوضح بيها إزاي نستدعي الـ function دي، من غير ما نعرض كل تفاصيل تعريفها. اسمها الdeclaration:
 
-#+begin_src C
+#+begin_src C++
 int square(int);
 double power(double);
 #+end_src
 
 لاحظ الsemicolon في الاخر، في الfunction declaration بنستخدم semicolon بدل الfunction body في الdefinition:
 
-#+begin_src C
+#+begin_src C++
 int square(int x) {
 	return x * x;
 }
@@ -999,7 +999,7 @@ int square(int x) {
 
 الvector هو مجموعه من الelements تقدر تaccess اي element فيه عن طريق حاجه اسمها index، علي سبيل المثال دا vector اسمه v:
 
-[[../../images/vector.png]]
+[[../images/vector.png]]
 
 هتلاقي ان اول element بيبدأ بindex 0 وتاني element ب1 وهكذا لحد ما نوصل لأخر element اللي الindex بتاعه هيبقي عدد الelements في الvector ناقص واحد، او نقدر نقول بشكل اخر ]zero:size].
 
@@ -1007,35 +1007,35 @@ int square(int x) {
 
 في ال++C ممكن نعمل vector زي دا كدا:
 
-#+begin_src C
+#+begin_src C++
 #include <vector>
 std::vector<int> v = {5, 7, 9, 4, 6, 8};
 #+end_src
 
 هتلاحظ اننا بنحدد الtype بتاع الelements اللي في الvector جوا ~<>~ وفي الحاله دي int، ممكن مثلا نعمل vector بيخزن strings بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 std::vector<std::string> philosopher = {"Kant", "Plato", "Hegel", "Nietzsche"};  // vector of 4 strings
 std::cout << philosopher[3] << '\n';  // output: Nietzsche
 #+end_src
 
 وبطبيعه الحال، الvector هيرفض انك تحط فيه elements من نوع غلط، مثلا:
 
-#+begin_src C
+#+begin_src C++
 philosopher[2] = 99;  // error : trying to assign an int to a string
 v[2] = "Hume";        // error : trying to assign a string to an int
 #+end_src
 
 ممكن برضو نdefine vector بsize معين منغير ما نحط قيم للelements، وفي الحاله دي كلهم بيتعملهم default initialization، مثلا:
 
-#+begin_src C
+#+begin_src C++
 std::vector<int> vi(6);  // a vector of 6 ints initialized to 0
 std::vector<std::string> vs(4)  // a vector of 4 strings initialized to "" or empty string
 #+end_src
 
 طبعا مينفعش تحاول تعمل access علي element من الvector مش موجود، مثلا:
 
-#+begin_src C
+#+begin_src C++
 vi[2000] = 4;  // runtime error
 #+end_src
 
@@ -1044,7 +1044,7 @@ vi[2000] = 4;  // runtime error
 ** المرور علي عناصر الvector
 بما ان كل vector عارف الsize بتاعه، فاحنا ممكن نستخدم member function تجيبلنا الsize بتاعه، وده هيسمحلنا اننا نمر علي العناصر اللي فيه باستخدام loop، مثلا:
 
-#+begin_src C
+#+begin_src C++
 std::vector<int> v = {5, 7, 9, 4, 6, 8};
 for (int i = 0; i < v.size(); i++) {
 	std::cout << v[i] << '\n';
@@ -1065,7 +1065,7 @@ or
 
 وفي طريقه تانيه اننا نعمل loop علي الelements بتاع الvector:
 
-#+begin_src C
+#+begin_src C++
 std::vector<int> v = {5, 7, 9, 4, 6, 8};
 for (int i : v) {
 	std::cout << i << '\n';
@@ -1078,7 +1078,7 @@ for (int i : v) {
 واحده من اهم مميزات الvector انك تقدر تضيف عليه elements، ساعات مثلا هتبدأ بempty vector مفيهوش عناصر، وهتعوز تزود عناصر فيه واحده واحده، وهنا هنستخدم member function تانيه اسمها ()push_back.
 الfunction دي بتزود عنصر في اخر الvector انت هتبقي محدده:
 
-[[../../images/push_back.png]]
+[[../images/push_back.png]]
 
 لاحظ الsyntax بتاع ~()push_back~ زيه زي الsyntax بتاع ~()size~ الاتنين member functions للvector ولازم تنادي عليهم بال ~.~.
 
@@ -1103,7 +1103,7 @@ object_name.member_function_name(argument_list)
 
 كمثال عملي، هنفترض إننا عايزين نقرأ أرقام float بتمثّل درجات حرارة.
 
-#+begin_src C
+#+begin_src C++
 int main() { // reads emperatures into a vector
     std::vector<double> temps;
     for(double temp; std::cin >> temp;)
@@ -1114,7 +1114,7 @@ int main() { // reads emperatures into a vector
 
 ايه اللي بيحصل هنا بظبط؟ تعالي ناخدها سطر سطر
 
-#+begin_src C
+#+begin_src C++
 std::vector<double> temps;
 #+end_src
 
@@ -1122,7 +1122,7 @@ std::vector<double> temps;
 
 في الloop اللي بعده؟
 
-#+begin_src C
+#+begin_src C++
 for(double temp; std::cin >> temp;)
     temps.push_back(temp);
 #+end_src
@@ -1135,7 +1135,7 @@ for(double temp; std::cin >> temp;)
 
 بعد لما ناخد الdata بتاعتنا فيvector ممكن بعد كدا نستخدمها، علي سبيل المثال تعالي نحسب المتوسط والوسيط أو mean and median.
 
-#+begin_src C
+#+begin_src C++
 #include <algorithm>
 
 int main() { // reads emperatures into a vector

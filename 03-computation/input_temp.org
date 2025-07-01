@@ -73,13 +73,13 @@ int main() {
 
 تعالي نجرب نشغل كدا البرنامج دا ونشوف هيعمل ايه عندي علي السيستم.
 
-[[../../images/cin_state_nodelay.png]]
+[[../images/cin_state_nodelay.png]]
 
 اول حاجه هتلاقي انه قاللي ان الinput statement اتنفذت عادي، وقاللي برضو ان الstate بتاعه الcin حاليا هي good ومستني مني input تاني عادي.
 
 تعالي بقا نجرب نكتب bad input او eof.
 
-[[../../images/cin_failed_nodelay.png]]
+[[../images/cin_failed_nodelay.png]]
 
 ده اللي حصل لما دخلتله رقم الأول قبل الstring. الحقيقه انه كتب حوالي 52000 سطر قبل ما انا اوقفه ب C-c في خلال حوالي 3 ثواني، دا ليه؟ لأن لو تلاحظ الstate بتاع cin هي failed، وده بسبب اني حاولت ادخل string في متغير من نوع int، علشان كدا الinput statement معادتش هتتنفذ وهتلاقي السطر اللي بيقولنا انها اتفذت معادش بيتطبع، وهيفضل البرنامج في حلقه لا نهائيه من الطباعه بسبب ان الشرط بتاع الloop دايما متحقق ودايما هيطبع الprompt ومش هيقف ابدا علشان ياخد input علشان الcin في حاله fail.
 
@@ -108,7 +108,7 @@ int main() {
 
 لما نيجي نشغل البرنامج دا هيطلعلنا دا:
 
-[[../../images/waiting.png]]
+[[../images/waiting.png]]
 
 اهو كدا بقا نقدر نشوف اللي بيحصل بشكل افضل، هتلاقي ان لما بندخله yousef 22 عادي بيتصرف بشكل طبيعي زي المره اللي فاتت، بس لما دخلناله الbad input بتاعنا وحاول يدخل "yousef" علي age، الcin دخلت في fail state ومطبعش السطر بتاع الinput statement executed، وكمان قاللنا 1 جنب cin.fail والمره الجايه اللي طبع فيها الprompt مستناش ياخد input ودخل علي طول علي السطر اللي بعده علشان الcin في fail state وبيفضل هكذا في حلقه مفرغه.
 
@@ -131,13 +131,13 @@ int main() {
 
 لما نيجي ننفذ البرنامج دا هتلاقي دا اللي بيحصل:
 
-[[../../images/cin_clear.png]]
+[[../images/cin_clear.png]]
 
 زي ما انت شايف حتي بعد لما دخلناله bad input هو رجع ياخد مننا input تاني عادي بسبب اننا عملنا clear للcin state.
 
 وتفتكر ان المشكله اتحلت والبرنامج بتاعنا بقا فيه prompt وبقا بيقدر يتعامل مع الbad input لحد ما تكمل استخدام البرنامج وتجرب تدخل بعد كدا الinput الصح وتكتشف انه بيعمل حاجه غريبه جدا:
 
-[[../../images/bad_input_buffer.png]]
+[[../images/bad_input_buffer.png]]
 
 هتلاحظ ان في الiteration لما دخلناله الbad input الstate بتاعه cin كانت fail، ليه؟ لأنه جه يدخل "yousef" في age معرفش، تفتكر "yousef" دي هتورح فين؟ هتروح للinput buffer.
 
@@ -155,7 +155,7 @@ int main() {
 
 لو جينا نشغل البرنامج دا ونديله كذا input ورا بعض هتلاقي دا اللي بيحصل:
 
-[[../../images/age_input_buffer.png]]
+[[../images/age_input_buffer.png]]
 
 هنا 20 هتتقرأ في age عادي، بس 21 و 22 و 23 هيتخزنوا في الinput buffer علشان نستخدمهم بعد كدا.
 
@@ -212,13 +212,13 @@ std::cout << std::numeric_limits<int>::max() << '\n';
 
 وده بيضمن ان مفيش اي حاجه من الbad input هتتخزن في الbuffer، وبكده احنا لما هنعمل =continue= وهنخلي البرنامج يتجاهل الiteration الحاليه ونعمل الiteration الجايه هنبدأ بgood cin state وكمان input buffer فاضي.
 
-[[../../images/cin_ignore.png]]
+[[../images/cin_ignore.png]]
 
 زي ما انت شايف اخيرا البرنامج بتاعنا بقي منيع ضد الbad input.
 
 وتظن ان خلاص كدا بس تكتشف ان لسه في مشكله بسيطه جدا، هنقفل البرنامج ازاي؟ احنا كنا بنقفله عن طريق اننا نديله bad input، دلوقتي معدش ينفع، فهنيجي نقفله ب C-d او eof character هتلاقيه بيقولك:
 
-[[../../images/eof_problem.png]]
+[[../images/eof_problem.png]]
 
 ليه؟ علشان نفهم دا بيحصل ليه هنحتاج نرجع الfunction الجميله بتاعتنا بتاعه =()print_cin_state= هي و ~()sleep_for~.
 
@@ -238,7 +238,7 @@ int main() {
 
 لما هنيجي نشغل الكود دا ونديله eof character او C-d هيحصل الاتي:
 
-[[../../images/eof_problem2.png]]
+[[../images/eof_problem2.png]]
 
 اللي انا عملته ان اول لما البرنامج اشتغل بدل ما اديله input قمت مديله eof character علطول، زي ما انت شايف دا هيدخل cin في حاله fail و eof الاتنين مع بعض!
 
@@ -265,7 +265,7 @@ int main() {
 
 هتلاقي بيطلعلك المنظر دا لما تشغله:
 
-[[../../images/eof_problem3.png]]
+[[../images/eof_problem3.png]]
 
 زي ما انت شايف ال =()std::cin.clear= بتعمل clear للfail state بس مش بتعمل clear لل eof state! والeof state زيها زي الfail بتخلي cin متشتغلش.
 

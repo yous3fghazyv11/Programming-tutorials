@@ -88,13 +88,13 @@
 
 علي سبيل المثال، تعالي نشوف بعض الcallings للfunction البسيطه دي:
 
-#+begin_src C
+#+begin_src C++
 int area(int length, int width); // calculate area of a rectangle
 #+end_src
 
 * الsyntax errors
 
-#+begin_src C
+#+begin_src C++
 int s1 = area(7,2; // error: ) missing
 int s2 = area(7,2) // error: ; missing
 Int s3 = area(7,2); // error: Int (with a capitalized ’i’) is not a type
@@ -136,7 +136,7 @@ Syntax error: missing ';' before identifier 's3'
 
 مثال:
 
-#+begin_src C
+#+begin_src C++
 int x0 = arena(7,2); // error : undeclared function
 int x1 = area(7); // error : wrong number of arguments
 int x2 = area("seven",2); // error : 1st argument has a wrong type
@@ -163,7 +163,7 @@ int x2 = area("seven",2); // error : 1st argument has a wrong type
 
 
 ودي بس شوية أمثلة، لكن في الحقيقة، فيه كمية ضخمة من الأخطاء ممكن الـ compiler يساعدك تكتشفها وتصلحها قبل ما البرنامج يشتغل أصلاً.
-ودي من الحاجات اللي بتخلّي C قوية جدًا لما تعرف تستخدم أدواتها صح.
+ودي من الحاجات اللي بتخلّي ++C قوية جدًا لما تعرف تستخدم أدواتها صح.
 
 وإنت شغال مع الـ compiler، ساعات هتتمنى لو كان "ذكي" كفاية علشان يفهم إنت كنت تقصد إيه،
 يعني تتمنى إن بعض الـ errors اللي بيطلعها ما تكونش errors أصلاً.
@@ -173,7 +173,7 @@ int x2 = area("seven",2); // error : 1st argument has a wrong type
 
 بص على الأمثلة دي:
 
-#+begin_src C
+#+begin_src C++
 int x4 = area(10,−7); // OK: but what is a rectangle with a width of minus 7?
 int x5 = area(10.7,9.3); // OK: but calls area(10,9)
 char x6 = area(100,9999); // OK: but truncates the result
@@ -200,7 +200,7 @@ char x6 = area(100,9999); // OK: but truncates the result
 وفيه أدوات تانية بتساعد إنها تكتشف حاجات ممكن تكون مش مخالفة لقوانين اللغة، بس إحنا كمبرمجين بنحب نعتبرها غلط.
 
 وأغلب الأدوات دي بتبقى domain-specific، يعني مفيدة في أنواع معينة من البرامج.
-من الأمثلة على كده أدوات بتنفّذ قواعد [C Core Guidelines]، ودي أدوات قوية بتساعدك تكتب كود أنضف وأأمن.
+من الأمثلة على كده أدوات بتنفّذ قواعد [C++ Core Guidelines]، ودي أدوات قوية بتساعدك تكتب كود أنضف وأأمن.
 
 * الlink-time errors
 أي برنامج بيتكوّن من كذا جزء متكامل، كل جزء منهم بيتعمله compile لوحده، وده اللي بنسميه translation unit أو module.
@@ -212,7 +212,7 @@ char x6 = area(100,9999); // OK: but truncates the result
 لو أي واحدة من القاعدتين دي اتكسرت، الـ linker هيطلع error.
 
 
-#+begin_src C
+#+begin_src C++
 int area(int length, int width); // declaration for a function that calculates the area of a rectangle
 int main() {
     int x = area(2, 3);  // function call
@@ -223,7 +223,7 @@ int main() {
 
 عشان الكود يشتغل تمام، لازم يكون فيه تعريف حقيقي للـ ~()area~ ، بالشكل ده مثلًا:
 
-#+begin_src C
+#+begin_src C++
 int area(int length, int width); // function declaration
 
 int area(int x, int y) { // function definition
@@ -239,7 +239,7 @@ int main() {
 
 ودي امثله علي بعض الdefinitions اللي مش هتنفع:
 
-#+begin_src C
+#+begin_src C++
 double area(double x, double y) { ... }    // wrong return type
 int area(int x, int y, char unit) { ... }  // wrong number of arguments
 #+end_src
@@ -275,7 +275,7 @@ int area(int x, int y, char unit) { ... }  // wrong number of arguments
 
 علي سبيل المثال:
 
-#+begin_src C
+#+begin_src C++
 int area(int length, int width) {
 // calculate area of a rectangle
     return length∗width;
@@ -319,7 +319,7 @@ int main() {
 
 بس قبل ما نجاوب علي الأسئله دي، بص احنا بنحسب الratio ازاي:
 
-#+begin_src C
+#+begin_src C++
 double ratio = double(area1) / area3;
 #+end_src
 
@@ -336,7 +336,7 @@ double ratio = double(area1) / area3;
 
 انك تحمي الcalls بتاعه area في test من الbad input نوعا ما سهل:
 
-#+begin_src C
+#+begin_src C++
 if (x <= 0)
     throw std::runtime_error("non−positive x");
 if (y <= 0)
@@ -348,7 +348,7 @@ int area1 = area(x, y);
 
 لو محتجناش اننا نطبع error message مختلفه لكل argument كان ممكن نعملها بالشكل دا:
 
-#+begin_src C
+#+begin_src C++
 if (x <= 0 || y <= 0)
 	throw std::runtime_error("non positve area() argument");
 int area1 = area(x, y);
@@ -356,7 +356,7 @@ int area1 = area(x, y);
 
 علشان نتأكد ان ()area مش بيخشلها اي arguments غلط هنحتاج نتأكد ان calls بتاعه ()framed_area تبقي اكبر من 2، وساعتها هيبقي الكود شكله كدا:
 
-#+begin_src C
+#+begin_src C++
 if (x <= 0 || y <= 0)
 	throw std::runtime_error("non positve area() argument");
 int area1 = area(x, y);
@@ -376,7 +376,7 @@ double ratio = static_cast<double>(area1)/area3; // convert to double to get flo
 
 بس احنا في الطبيعي المفروض منبقاش عارفين دا! زي ما قلنا الfunctions لازم تكون abstract قدر الامكان، وغير كدا افرض حد قرر يعدل framed_area علشان تطرح 1 بدل 2، ساعتها احنا هنروح نشوف كل call لframed_area ونروح علي الerror checking بتاعها ونغيره ل1 بدل 2، وكمان 2 في الحاله دي تعتبر مثال علي الmagic constants، خلينا ندي اسم للقيمه اللي بتتطرح من framed_area
 
-#+begin_src C
+#+begin_src C++
 constexpr int 2 = 2;
 int framed_area(int x, int y) {
 // calculate area within frame
@@ -386,7 +386,7 @@ int framed_area(int x, int y) {
 
 وبعدها ممكن نستخدم الأسم دا واحنا بنحمي الcalls بتاعه framed_area بعد كدا:
 
-#+begin_src C
+#+begin_src C++
 if (x <= 0 || y <= 0)
 	throw std::runtime_error("non positve area() argument");
 int area1 = area(x, y);
@@ -407,7 +407,7 @@ double ratio = static_cast<double>(area1)/area3; // convert to double to get flo
 ** الcallee هو اللي يتعامل مع الerrors
 لو عايزين نتcheck لو الarguments valid جوا الfunctions نفسها فالموضوع سهل:
 
-#+begin_src C
+#+begin_src C++
 int framed_area(int x, int y) {
 // calculate area within frame
     constexpr int frame_width = 2;
@@ -423,7 +423,7 @@ int framed_area(int x, int y) {
 
 تعالي نعمل نفس الكلام في ~()area~:
 
-#+begin_src C
+#+begin_src C++
 int area(int length, int width) {
 // calculate area of a rectangle
 	if (length <= 0 || width <= 0)
@@ -436,7 +436,7 @@ int area(int length, int width) {
 
 ويبقي الكود الاخير كدا:
 
-#+begin_src C
+#+begin_src C++
 int area(int length, int width) {
 // calculate area of a rectangle
 	if (length <= 0 || width <= 0)
@@ -473,7 +473,7 @@ int main() {
 
 بص مثلا الfunction دي في ex14 في المحاضره اللي فاتت:
 
-#+begin_src C
+#+begin_src C++
 int find_score(std::vector<std::string> names, std::vector<int> scores, std::string name) {
     for (int i = 0; i < names.size(); i++) {
         if (names[i] == name) return scores[i];
@@ -484,7 +484,7 @@ int find_score(std::vector<std::string> names, std::vector<int> scores, std::str
 
 هتلاقي اننا لو لقينا score بنرجعه، لو ملقيناش بنرجع -1، وبعد كدا في الmain واحنا بنستخدم الfunction:
 
-#+begin_src C
+#+begin_src C++
 while (std::cin >> search_name) {
     int found_score = find_score(names, scores, search_name);
     if (found_score == -1) {
@@ -518,7 +518,7 @@ while (std::cin >> search_name) {
 
 تعالي نبص علي الfunction بتاعتنا area لو استخدمنا فيها الexceptions:
 
-#+begin_src C
+#+begin_src C++
 #include <iostream>
 #include <stdexcept>
 
