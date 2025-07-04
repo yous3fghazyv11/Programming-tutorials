@@ -51,7 +51,7 @@ int main() {
 
     int search_score;
     std::vector<std::string> found_names;
-    std::cout << "please type a name and i will return its corresponding score:\n";
+    std::cout << "please type a score and i will return its corresponding name:\n";
     while (std::cin >> search_score) {
         found_names = find_name(names, scores, search_score);
         if (found_names.size() < 1) {
