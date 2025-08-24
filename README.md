@@ -55,6 +55,4 @@ The video uses GCC with Visual Studio Code, but there are plenty of tutorials on
 in this section i will give credits to the awesome books and resources i used to bring this course to life.
 
 - [*Programming — Principles and Practice Using C++ (3rd Edition)*](https://www.stroustrup.com/programming.html)
-- [*Hacking: The Art of Exploitation*](https://www.amazon.eg/-/en/Hacking-Art-Exploitation-Jon-Erickson/dp/1593271441)
-- [*C Programming: A Modern Approach*](https://www.amazon.com/C-Programming-Modern-Approach-2nd/dp/0393979504)
 
