@@ -1,7 +1,7 @@
 #include <iostream>
 
 int main() {
-	int val1, val2;
+	double val1, val2;
 	std::cout << "first number: ";
 	std::cin >> val1;
 	std::cout << "second number: ";
@@ -19,7 +19,7 @@ int main() {
 	std::cout << "the sum is " << val1 + val2 << '\n';
 	std::cout << "the difference is " << val1 - val2 << '\n';
 	std::cout << "the product is " << val1 * val2 << '\n';
-	std::cout << "the ratio is " << val1/val2 << '\n'; // do you see the bug here?
+	std::cout << "the ratio is " << val1/val2 << '\n'; // now 5/2 gives 2.5 not 2. but what if val2 is zero?
 
 	return 0;
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 
 int main() {
-	double mtkm = 1.609;
+	double mtkm = 1.609; // miles to kilometers conversion ratio
 
 	double miles = 0;
 	std::cout << "miles: ";
