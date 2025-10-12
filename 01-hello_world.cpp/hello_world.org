@@ -72,9 +72,10 @@
 
 #+begin_src C++
 // Simple program to print out "Hello, World!" in the standard output (terminal)
+
 #include <iostream>  // `including` the input/output stream headers from the standard library
 
-int main() { // the main function
+int main() {
     std::cout << "Hello, World!\n"; // the line that actually produces the output
     return 0;  // exit status returned to the operating system from our program, zero indicates successs
 }
